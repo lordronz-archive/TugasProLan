@@ -16,6 +16,12 @@
     <Filter Include="SFML Template">
       <UniqueIdentifier>{592206ae-8b7b-4dec-bac6-de230571d98a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Textures">
+      <UniqueIdentifier>{dad02f27-4f92-4638-98ff-2a9eee1c7194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Sfx">
+      <UniqueIdentifier>{eff769a6-6674-4ff9-a077-6d80c0a1e085}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
@@ -74,5 +80,51 @@
     <ClInclude Include="Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Sound\devil-may-cry-menu-sound.wav">
+      <Filter>Resource Files\Sfx</Filter>
+    </Media>
+    <Media Include="Sound\devil-may-cry-menu-sound0.wav">
+      <Filter>Resource Files\Sfx</Filter>
+    </Media>
+    <Media Include="Sound\dmc_menu_select.wav">
+      <Filter>Resource Files\Sfx</Filter>
+    </Media>
+    <Media Include="Sound\galil.wav">
+      <Filter>Resource Files\Sfx</Filter>
+    </Media>
+    <Media Include="Sound\pl_dirt1.wav">
+      <Filter>Resource Files\Sfx</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\awp.bmp">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Textures\awp.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Textures\ct1.bmp">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Textures\Desert.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Textures\dust.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Textures\gunshot.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Textures\icon.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Textures\pointer.bmp">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Textures\pointer.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

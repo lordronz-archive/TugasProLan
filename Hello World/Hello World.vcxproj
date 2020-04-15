@@ -176,6 +176,24 @@
     <ClInclude Include="Wall.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="Sound\devil-may-cry-menu-sound.wav" />
+    <Media Include="Sound\devil-may-cry-menu-sound0.wav" />
+    <Media Include="Sound\dmc_menu_select.wav" />
+    <Media Include="Sound\galil.wav" />
+    <Media Include="Sound\pl_dirt1.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\awp.bmp" />
+    <Image Include="Textures\awp.png" />
+    <Image Include="Textures\ct1.bmp" />
+    <Image Include="Textures\Desert.png" />
+    <Image Include="Textures\dust.png" />
+    <Image Include="Textures\gunshot.png" />
+    <Image Include="Textures\icon.png" />
+    <Image Include="Textures\pointer.bmp" />
+    <Image Include="Textures\pointer.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
