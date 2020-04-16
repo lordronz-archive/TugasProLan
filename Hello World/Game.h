@@ -24,6 +24,7 @@ private:
 	sf::Clock clock;
 	sf::Texture cursorText;
 	sf::Sprite cursor;
+	sf::Vector2f checkView();
 
 public:
 	Game();

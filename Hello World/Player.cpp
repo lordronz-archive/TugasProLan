@@ -55,64 +55,79 @@ sf::Vector2f Player::getPlayerCenter()
 	return playerCenter;
 }
 
+bool Player::Move(float moveX, float moveY)
+{
+	sf::Vector2f pos = player.getPosition();
+	sf::Vector2f scl = player.getScale();
+	//position from sprites base point
+	int posX = pos.x;
+	int posY = pos.y;
+
+	if (moveX > 0 || moveY > 0) {
+		if (posX + moveX >= 1280 || posY + moveY >= 720) {
+			return false;
+		}
+	}
+	if (moveX < 0 || moveY < 0) {
+		if (posX - moveX <= 0 || posY - moveY <= 0) {
+			return false;
+		}
+	}
+	if (moveX == 0 && moveY == 0)
+		return false;
+	player.move(moveX, moveY);
+	return true;
+}
+
 void Player::movePlayer()
 {
-	bool idle = true;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		if (walkSfx.getStatus() == 0)
 			walkSfx.play();
-		player.move(-.707f, -.707f);
-		idle = false;
+		Move(-.707f, -.707f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		if (walkSfx.getStatus() == 0)
 			walkSfx.play();
-		player.move(.707f, -.707f);
-		idle = false;
+		Move(.707f, -.707f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		if (walkSfx.getStatus() == 0)
 			walkSfx.play();
-		player.move(-.707f, .707f);
-		idle = false;
+		Move(-.707f, .707f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		if (walkSfx.getStatus() == 0)
 			walkSfx.play();
-		player.move(.707f, .707f);
-		idle = false;
+		Move(.707f, .707f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		if (walkSfx.getStatus() == 0)
 			walkSfx.play();
-		player.move(-1.f, 0.f);
-		idle = false;
+		Move(-1.f, 0.f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		if (walkSfx.getStatus() == 0)
 			walkSfx.play();
-		player.move(1.f, 0.f);
-		idle = false;
+		Move(1.f, 0.f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
 		if (walkSfx.getStatus() == 0)
 			walkSfx.play();
-		player.move(0.f, -1.f);
-		idle = false;
+		Move(0.f, -1.f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		if (walkSfx.getStatus() == 0)
 			walkSfx.play();
-		player.move(0.f, 1.f);
-		idle = false;
+		Move(0.f, 1.f);
 	}
 }
 

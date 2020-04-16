@@ -26,6 +26,7 @@ private:
 	sf::SoundBuffer walkSfxBuffer;
 	sf::Sound walkSfx;
 	void movePlayer();
+	bool Move(float moveX, float moveY);
 	float dt1;
 	float dt2;
 	bool fire;
