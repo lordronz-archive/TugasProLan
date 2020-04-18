@@ -18,7 +18,7 @@ private:
 	Bullet b1;
 	std::vector<Bullet> bullets;
 	Map map;
-	std::array<Wall, 3> walls;
+	std::array<Wall, 25> walls;
 	Wall wall;
 	sf::View view;
 	sf::Clock clock;
