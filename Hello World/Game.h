@@ -8,6 +8,8 @@
 #include "Map.h"
 #include "Bullet.h"
 #include "Wall.h"
+#include "Zombie.h"
+
 #include <array>
 
 class Game
@@ -16,6 +18,8 @@ private:
 	Player player;
 	Window window;
 	Bullet b1;
+	Zombie zombie;
+	std::vector<Zombie> zombies;
 	std::vector<Bullet> bullets;
 	Map map;
 	std::array<Wall, 25> walls;
@@ -25,6 +29,8 @@ private:
 	sf::Texture cursorText;
 	sf::Sprite cursor;
 	sf::Vector2f checkView();
+	void updatePlayer();
+	void updateWalls();
 
 public:
 	Game();

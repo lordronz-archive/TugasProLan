@@ -11,9 +11,10 @@ public:
 	void initWall(sf::Vector2f size, sf::Vector2f position);
 	sf::RectangleShape getShape();
 	Collider GetCollider();
+	sf::RectangleShape body;
 
 private:
-	sf::RectangleShape body;
+
 };
 
 #endif

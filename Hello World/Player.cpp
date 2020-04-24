@@ -4,9 +4,8 @@ Player::Player() : fire(false), dt1(0), dt2(0)
 {
 	// Setting up class members.
 	if (!playerTexture.loadFromFile("Textures/ct1.bmp"))
-	{
 		std::cout << "ERROR LOADING PLAYER TEXTURE" << std::endl;
-	}
+
 	playerTexture.setSmooth(true);
 	textSize = playerTexture.getSize();
 	textSize.x /= 2;
@@ -19,9 +18,8 @@ Player::Player() : fire(false), dt1(0), dt2(0)
 	player.setPosition(sf::Vector2f(640, 360));
 
 	if (!gunTexture.loadFromFile("Textures/awp.png"))
-	{
 		std::cout << "ERROR LOADING GUN TEXTURE" << std::endl;
-	}
+
 	gunTexture.setSmooth(true);
 	gun.setTexture(gunTexture);
 	gun.setScale(sf::Vector2f(0.40, 0.40));
@@ -29,24 +27,21 @@ Player::Player() : fire(false), dt1(0), dt2(0)
 	gun.setPosition(player.getPosition().x, player.getPosition().y);
 
 	if (!gunshotTexture.loadFromFile("Textures/gunshot.png"))
-	{
 		std::cout << "ERROR LOADING GUNSHOT TEXTURE" << std::endl;
-	}
+
 	gunshot.setTexture(gunshotTexture);
 	gunshot.setScale(sf::Vector2f(0.5, 0.5));
 	gunshot.setOrigin(gunshotTexture.getSize().x / 2, gunshotTexture.getSize().y + 45);
 	gunshot.setPosition(player.getPosition().x, player.getPosition().y);
 
 	if (!weaponSfxBuffer.loadFromFile("Sound/galil.wav"))
-	{
 		std::cout << "ERROR LOADING WEAPON SOUND" << std::endl;
-	}
+
 	weaponSfx.setBuffer(weaponSfxBuffer);
 
 	if (!walkSfxBuffer.loadFromFile("Sound/pl_dirt1.wav"))
-	{
 		std::cout << "ERROR LOADING WALKING SOUND" << std::endl;
-	}
+
 	walkSfx.setBuffer(walkSfxBuffer);
 }
 
@@ -57,6 +52,7 @@ sf::Vector2f Player::getPlayerCenter()
 
 bool Player::Move(float moveX, float moveY)
 {
+	float elapsed = movementTime.getElapsedTime().asSeconds() * 50;
 	sf::Vector2f pos = player.getPosition();
 	sf::Vector2f scl = player.getScale();
 	//position from sprites base point
@@ -75,7 +71,7 @@ bool Player::Move(float moveX, float moveY)
 	}
 	if (moveX == 0 && moveY == 0)
 		return false;
-	player.move(moveX, moveY);
+	player.move(moveX * elapsed, moveY * elapsed);
 	return true;
 }
 
@@ -155,6 +151,7 @@ void Player::updatePlayer(sf::RenderWindow* window)
 	}
 
 	movePlayer();
+	movementTime.restart();
 
 	player.setRotation(rotation + 90);
 	gun.setRotation(rotation + 90);

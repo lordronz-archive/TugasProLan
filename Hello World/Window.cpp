@@ -12,16 +12,13 @@ Window::~Window(){}
 
 void Window::BeginDraw()
 {
-	window.clear(sf::Color(0, 0, 0, 1));
+	window.clear(sf::Color(sf::Color::Black));
 }
 
 void Window::EndDraw()
 {
 	window.display();
-	if (play)
-		window.setMouseCursorVisible(false);
-	else
-		window.setMouseCursorVisible(true);
+	play ? window.setMouseCursorVisible(false) : window.setMouseCursorVisible(true);
 }
 
 void Window::Update()
@@ -128,10 +125,8 @@ void Window::Draw(sf::Drawable& l_drawable)
 			window.draw(menu.menuDraw()[i]);
 		}
 	}
-	if (play)
-	{
+	else
 		window.draw(l_drawable);
-	}
 }
 
 bool Window::checkIfBegin()

@@ -21,6 +21,7 @@ private:
 	sf::Sprite gunshot;
 	sf::Clock clock1;
 	sf::Clock clock2;
+	sf::Clock movementTime;
 	sf::SoundBuffer weaponSfxBuffer;
 	sf::Sound weaponSfx;
 	sf::SoundBuffer walkSfxBuffer;

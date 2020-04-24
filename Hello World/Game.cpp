@@ -4,9 +4,8 @@ Game::Game() :
 	view(sf::View(sf::FloatRect(640, 360, 256, 144))), walls {wall}
 {
 	if (!cursorText.loadFromFile("Textures/pointer.png"))
-	{
 		std::cout << "ERROR LOADING CURSOR TEXTURE" << std::endl;
-	}
+
 	sf::Vector2u textSize = cursorText.getSize();
 	textSize.x /= 2;
 	textSize.y /= 2;
@@ -46,6 +45,10 @@ Game::Game() :
 	walls[23].initWall(sf::Vector2f(160.0f, 96.0f), sf::Vector2f(848.0f, 272.0f));
 	walls[24].initWall(sf::Vector2f(64.0f, 224.0f), sf::Vector2f(898.0f, 432.0f));
 	
+	zombies.push_back(zombie);
+	zombies.push_back(zombie);
+	zombies.push_back(zombie);
+	zombies.push_back(zombie);
 	
 	const int tiles[] =
 	{	//1 tile = 32 * 32 pixel
@@ -77,11 +80,12 @@ Game::Game() :
 	map.load(tiles);
 }
 
-Game::~Game()
-{}
+Game::~Game() {
+	zombies = std::vector<Zombie>();
+	bullets = std::vector<Bullet>();
+}
 
-sf::Vector2f Game::checkView()
-{
+sf::Vector2f Game::checkView() {
 	float deltaViewX = 0;
 	float deltaViewY = 0;
 	if (player.getCharCoord().x - 128 < 0)
@@ -99,46 +103,77 @@ sf::Vector2f Game::checkView()
 	return sf::Vector2f(player.getCharCoord().x - deltaViewX, player.getCharCoord().y - deltaViewY);
 }
 
-void Game::Update() {
-	sf::Vector2f playerPos = player.getCharCoord();
+void Game::updatePlayer() {
 	sf::RenderWindow* win = window.getWindow();
+	sf::Vector2f playerPos = player.getCharCoord();
 	float dt = clock.getElapsedTime().asSeconds();
-	window.Update(); // Update window events.
-	cursor.setPosition(player.getMousePos());
-
-	if (window.checkIfBegin())
+	player.updatePlayer(win);
+	if (dt > 2)
 	{
-		player.updatePlayer(win);
-		if (dt > 2)
+		//fire
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			//fire
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			{
-				b1.fire(win, playerPos);
-				bullets.push_back(Bullet(b1));
+			b1.fire(win, playerPos);
+			bullets.push_back(Bullet(b1));
 
-				clock.restart();
-			}
+			clock.restart();
 		}
-		for (size_t i = 0; i < bullets.size(); i++)
+	}
+	for (size_t i = 0; i < bullets.size(); i++)
+	{
+		bullets[i].projectile.move(bullets[i].currVelocity);
+		if (bullets[i].projectile.getPosition().x < 0 || bullets[i].projectile.getPosition().x > 1280
+			|| bullets[i].projectile.getPosition().y < 0 || bullets[i].projectile.getPosition().y > 720)
 		{
-			bullets[i].projectile.move(bullets[i].currVelocity);
-			if (bullets[i].projectile.getPosition().x < 0 || bullets[i].projectile.getPosition().x > 1280
-				|| bullets[i].projectile.getPosition().y < 0 || bullets[i].projectile.getPosition().y > 720)
+			//removing bullets out of the map
+			bullets.erase(bullets.begin() + i);
+			bullets.shrink_to_fit();
+		}
+		
+	}
+}
+
+void Game::updateWalls() {
+	//Wall Collision
+	for (size_t i = 0; i < walls.size(); i++)
+	{
+		walls[i].GetCollider().checkCollision(player.GetCollider(), 1.0f);
+		for (size_t j = 0; j < zombies.size(); j++)
+			walls[i].GetCollider().checkCollision(zombies[j].GetCollider(), 1.0f);
+		for (size_t j = 0; j < bullets.size(); j++)
+		{
+			if (bullets[j].projectile.getGlobalBounds().intersects(walls[i].body.getGlobalBounds()))
 			{
-				//removing bullets out of the map
-				bullets.erase(bullets.begin() + i);
+				bullets.erase(bullets.begin() + j);
 				bullets.shrink_to_fit();
 			}
 		}
-		//Wall Collision
-		for (size_t i = 0; i < walls.size(); i++)
-		{
-			walls[i].GetCollider().checkCollision(player.GetCollider(), 1.0f);
-		}
+	}
+}
+
+void Game::Update() {
+	
+	window.Update(); // Update window events.
+
+	if (window.checkIfBegin())
+	{
+		sf::Vector2f playerPos = player.getCharCoord();
+		cursor.setPosition(player.getMousePos());
+
+		updatePlayer();
+		
+		updateWalls();
+
 		//set view relative to player
 		view.setSize(sf::Vector2f(256, 144));
 		view.setCenter(checkView());
+
+		for (size_t i = 0; i < zombies.size(); i++)
+		{
+			if (!player.getPlayerSprite()->getGlobalBounds().intersects(zombies[i].zombieSprite.getGlobalBounds()))
+				zombies[i].Move(playerPos);
+		}
+
 	}
 		
 	else if (!window.checkIfBegin())
@@ -153,16 +188,26 @@ void Game::Render()
 {
 	window.View(view);
 	window.BeginDraw();
-	window.Draw(map);
-	window.Draw(*player.getPlayerSprite());
-	window.Draw(*player.getGunSprite());
-	if (player.getFireStatus())
-		window.Draw(*player.getGunshotSprite());
-	for (size_t i = 0; i < bullets.size(); i++)
+	if (window.checkIfBegin())
 	{
-		window.Draw(bullets[i].projectile);
+		window.Draw(map);
+		for (size_t i = 0; i < zombies.size(); i++)
+			window.Draw(zombies[i].zombieSprite);
+		window.Draw(*player.getPlayerSprite());
+		window.Draw(*player.getGunSprite());
+		if (player.getFireStatus())
+			window.Draw(*player.getGunshotSprite());
+		for (size_t i = 0; i < bullets.size(); i++)
+			window.Draw(bullets[i].projectile);
+		window.Draw(cursor);
 	}
-	window.Draw(cursor);
+	//for drawing in main menu
+	else
+	{
+		sf::Sprite* temp = nullptr;
+		window.Draw(*temp);
+	}
+
 	window.EndDraw();
 }
 
