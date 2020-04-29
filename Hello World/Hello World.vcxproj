@@ -196,6 +196,9 @@
     <Image Include="Textures\pointer.bmp" />
     <Image Include="Textures\pointer.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="tiles.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

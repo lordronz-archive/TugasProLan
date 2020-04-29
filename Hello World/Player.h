@@ -4,6 +4,7 @@
 
 #include "Window.h"
 #include "Collider.h"
+#include <fstream>
 
 class Player
 {
@@ -31,6 +32,7 @@ private:
 	float dt1;
 	float dt2;
 	bool fire;
+	int tiles[23][40];
 
 public:
 	Player();

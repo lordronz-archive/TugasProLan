@@ -5,7 +5,7 @@ Collider::Collider(sf::Vector2f HalfSize, sf::Vector2f Position, sf::RectangleSh
 {
 }
 
-bool Collider::checkCollision(Collider other, float push)
+bool Collider::checkCollision(Collider other)
 {
 	sf::Vector2f otherPosition = other.Position;
 	sf::Vector2f otherHalfSize = other.HalfSize;
@@ -19,31 +19,30 @@ bool Collider::checkCollision(Collider other, float push)
 
 	if (intersectX < 0.0f && intersectY < 0.0f)
 	{
-		push = std::min(std::max(push, 0.0f), 1.0f);
 		if (intersectX > intersectY)
 		{
 			if (deltaX > 0.0f)
 			{
-				Move(intersectX * (1.0f - push), 0.0f);
-				other.MoveSprite(-intersectX * push, 0.0f);
+				Move(intersectX * (0.0f), 0.0f);
+				other.MoveSprite(-intersectX, 0.0f);
 			}
 			else
 			{
-				Move(-intersectX * (1.0f - push), 0.0f);
-				other.MoveSprite(intersectX * push, 0.0f);
+				Move(-intersectX * (0.0f), 0.0f);
+				other.MoveSprite(intersectX, 0.0f);
 			}
 		}
 		else
 		{
 			if (deltaY > 0.0f)
 			{
-				Move(0.0f, intersectY * (1.0f - push));
-				other.MoveSprite(0.0f, -intersectY * push);
+				Move(0.0f, intersectY * (0.0f));
+				other.MoveSprite(0.0f, -intersectY);
 			}
 			else
 			{
-				Move(0.0f, -intersectY * (1.0f - push));
-				other.MoveSprite(0.0f, intersectY * push);
+				Move(0.0f, -intersectY * (0.0f));
+				other.MoveSprite(0.0f, intersectY);
 			}
 		}
 	}

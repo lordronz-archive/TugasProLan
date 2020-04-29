@@ -6,6 +6,27 @@ Game::Game() :
 	if (!cursorText.loadFromFile("Textures/pointer.png"))
 		std::cout << "ERROR LOADING CURSOR TEXTURE" << std::endl;
 
+	std::ifstream file("tiles.txt");
+	if (file.is_open())
+	{
+		int i = 0;
+		int j = 0;
+		while (file >> this->tiles[i][j])
+		{
+			++j;
+			if (j % 40 == 0)
+			{
+				++i;
+				j = 0;
+			}
+		}
+	}
+	file.close();
+
+	zombie = new Zombie(tiles);
+
+	zombies.push_back(*zombie);
+
 	sf::Vector2u textSize = cursorText.getSize();
 	textSize.x /= 2;
 	textSize.y /= 2;
@@ -44,11 +65,7 @@ Game::Game() :
 	walls[22].initWall(sf::Vector2f(64.0f, 64.0f), sf::Vector2f(736.0f, 256.0f));
 	walls[23].initWall(sf::Vector2f(160.0f, 96.0f), sf::Vector2f(848.0f, 272.0f));
 	walls[24].initWall(sf::Vector2f(64.0f, 224.0f), sf::Vector2f(898.0f, 432.0f));
-	
-	zombies.push_back(zombie);
-	zombies.push_back(zombie);
-	zombies.push_back(zombie);
-	zombies.push_back(zombie);
+
 	
 	const int tiles[] =
 	{	//1 tile = 32 * 32 pixel
@@ -76,6 +93,7 @@ Game::Game() :
 /*21*/	61, 62, 49, 12, 5 , 1 , 4 , 4 , 9 , 9 , 9 , 9 , 23, 23, 1 , 24, 24, 24, 25, 10, 25, 16, 3 , 3 , 1 , 1 , 2 , 4 , 1 , 7 , 1 , 1 , 1 , 1 , 10, 16, 1 , 3 , 4 , 16,
 /*22*/	66, 67, 49, 12, 3 , 4 , 2 , 1 , 8 , 8 , 8 , 9 , 22, 23, 5 , 25, 25, 26, 27, 10, 26, 26, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
 /*23*/	47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47,
+
 	};
 	map.load(tiles);
 }
@@ -83,9 +101,10 @@ Game::Game() :
 Game::~Game() {
 	zombies = std::vector<Zombie>();
 	bullets = std::vector<Bullet>();
+	delete zombie;
 }
 
-sf::Vector2f Game::checkView() {
+sf::Vector2f Game::checkViewCenter() {
 	float deltaViewX = 0;
 	float deltaViewY = 0;
 	if (player.getCharCoord().x - 128 < 0)
@@ -119,7 +138,7 @@ void Game::updatePlayer() {
 			clock.restart();
 		}
 	}
-	for (size_t i = 0; i < bullets.size(); i++)
+	for (size_t i = 0; i < bullets.size(); ++i)
 	{
 		bullets[i].projectile.move(bullets[i].currVelocity);
 		if (bullets[i].projectile.getPosition().x < 0 || bullets[i].projectile.getPosition().x > 1280
@@ -135,12 +154,12 @@ void Game::updatePlayer() {
 
 void Game::updateWalls() {
 	//Wall Collision
-	for (size_t i = 0; i < walls.size(); i++)
+	for (size_t i = 0; i < walls.size(); ++i)
 	{
-		walls[i].GetCollider().checkCollision(player.GetCollider(), 1.0f);
-		for (size_t j = 0; j < zombies.size(); j++)
-			walls[i].GetCollider().checkCollision(zombies[j].GetCollider(), 1.0f);
-		for (size_t j = 0; j < bullets.size(); j++)
+		walls[i].GetCollider().checkCollision(player.GetCollider());
+		for (size_t j = 0; j < zombies.size(); ++j)
+			walls[i].GetCollider().checkCollision(zombies[j].GetCollider());
+		for (size_t j = 0; j < bullets.size(); ++j)
 		{
 			if (bullets[j].projectile.getGlobalBounds().intersects(walls[i].body.getGlobalBounds()))
 			{
@@ -166,9 +185,9 @@ void Game::Update() {
 
 		//set view relative to player
 		view.setSize(sf::Vector2f(256, 144));
-		view.setCenter(checkView());
+		view.setCenter(checkViewCenter());
 
-		for (size_t i = 0; i < zombies.size(); i++)
+		for (size_t i = 0; i < zombies.size(); ++i)
 		{
 			if (!player.getPlayerSprite()->getGlobalBounds().intersects(zombies[i].zombieSprite.getGlobalBounds()))
 				zombies[i].Move(playerPos);
@@ -186,18 +205,18 @@ void Game::Update() {
 
 void Game::Render()
 {
-	window.View(view);
+	//window.View(view);
 	window.BeginDraw();
 	if (window.checkIfBegin())
 	{
 		window.Draw(map);
-		for (size_t i = 0; i < zombies.size(); i++)
+		for (size_t i = 0; i < zombies.size(); ++i)
 			window.Draw(zombies[i].zombieSprite);
 		window.Draw(*player.getPlayerSprite());
 		window.Draw(*player.getGunSprite());
 		if (player.getFireStatus())
 			window.Draw(*player.getGunshotSprite());
-		for (size_t i = 0; i < bullets.size(); i++)
+		for (size_t i = 0; i < bullets.size(); ++i)
 			window.Draw(bullets[i].projectile);
 		window.Draw(cursor);
 	}
