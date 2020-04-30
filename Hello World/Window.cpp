@@ -2,7 +2,7 @@
 
 Window::Window():m_isDone(false), play(false)
 {
-	Setup("Hello World", sf::Vector2u(1280.0f, 720.0f));
+	Setup("Hello World", sf::Vector2u(1280, 720));
 	sf::Image icon;
 	icon.loadFromFile("Textures/icon.png");
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
@@ -120,9 +120,7 @@ void Window::Draw(sf::Drawable& l_drawable)
 		window.draw(sf::Sprite(*menu.drawMenuBg()));
 		window.draw(*menu.drawMenuBar());
 		for (int i = 0; i < 3; ++i)
-		{
 			window.draw(menu.menuDraw()[i]);
-		}
 	}
 	else
 		window.draw(l_drawable);
@@ -155,47 +153,3 @@ void Window::Create()
 		winTitle, style);
 	window.setFramerateLimit(60);
 }
-
-
-/*
-if (event.type == sf::Event::Closed) {
-			m_isDone = true;
-		}
-		else if (event.type == sf::Event::KeyPressed &&
-			event.key.code == sf::Keyboard::F5)
-		{
-			ToggleFullscreen();
-		}
-*/
-
-/*
-switch (event.type)
-		{
-		case sf::Event::KeyReleased:
-			switch (event.key.code)
-			{
-			case sf::Keyboard::Up:
-				menu.moveUp();
-				break;
-
-			case sf::Keyboard::Down:
-				menu.moveDown();
-				break;
-			}
-		break;
-
-		case sf::Event::Closed:
-			m_isDone = true;
-			break;
-
-		case sf::Event::KeyPressed:
-			switch (event.key.code)
-			{
-			case sf::Keyboard::F5:
-				ToggleFullscreen();
-				break
-			}
-			break
-		}
-	break
-*/

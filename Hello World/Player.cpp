@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player() : fire(false), dt1(0), dt2(0), healthPoints(500), isDead(false)
+Player::Player() : fire(false), dt1(0), dt2(0), healthPoints(500), isDead(false), stepCount(0)
 {
 	// Setting up class members.
 	if (!playerTexture.loadFromFile("Textures/ct1.bmp"))
@@ -10,7 +10,7 @@ Player::Player() : fire(false), dt1(0), dt2(0), healthPoints(500), isDead(false)
 	textSize = playerTexture.getSize();
 	textSize.x /= 2;
 	textSize.y /= 3;
-	playerCenter = sf::Vector2f(textSize.x / 2, textSize.y / 2);
+	playerCenter = sf::Vector2f(textSize.x / 2.0f, textSize.y / 2.0f);
 	player.setScale(sf::Vector2f(0.5, 0.5));
 	player.setOrigin(playerCenter);
 	player.setTexture(playerTexture);
@@ -22,8 +22,8 @@ Player::Player() : fire(false), dt1(0), dt2(0), healthPoints(500), isDead(false)
 
 	gunTexture.setSmooth(true);
 	gun.setTexture(gunTexture);
-	gun.setScale(sf::Vector2f(0.40, 0.40));
-	gun.setOrigin(gunTexture.getSize().x / 2, gunTexture.getSize().y + 5);
+	gun.setScale(sf::Vector2f(0.40f, 0.40f));
+	gun.setOrigin(gunTexture.getSize().x / 2.0f, gunTexture.getSize().y + 5.f);
 	gun.setPosition(player.getPosition().x, player.getPosition().y);
 
 	if (!gunshotTexture.loadFromFile("Textures/gunshot.png"))
@@ -31,8 +31,19 @@ Player::Player() : fire(false), dt1(0), dt2(0), healthPoints(500), isDead(false)
 
 	gunshot.setTexture(gunshotTexture);
 	gunshot.setScale(sf::Vector2f(0.5, 0.5));
-	gunshot.setOrigin(gunshotTexture.getSize().x / 2, gunshotTexture.getSize().y + 45);
+	gunshot.setOrigin(gunshotTexture.getSize().x / 2.0f, gunshotTexture.getSize().y + 45.f);
 	gunshot.setPosition(player.getPosition().x, player.getPosition().y);
+
+	if (!legsText.loadFromFile("Textures/legs.bmp"))
+		std::cout << "ERROR LOADING PLAYER TEXTURE" << std::endl;
+	legsTSize = legsText.getSize();
+	legsTSize.x /= 8;
+	legsTSize.y /= 2;
+	legs.setScale(sf::Vector2f(0.4, 0.4));
+	legs.setOrigin(sf::Vector2f(legsTSize.x / 2.0f, legsTSize.y / 2.0f));
+	legs.setTexture(legsText);
+	legs.setTextureRect(sf::IntRect(textSize.x * 0, textSize.y * 0, legsTSize.x, legsTSize.y));
+	legs.setPosition(sf::Vector2f(640, 360));
 
 	if (!weaponSfxBuffer.loadFromFile("Sound/galil.wav"))
 		std::cout << "ERROR LOADING WEAPON SOUND" << std::endl;
@@ -43,6 +54,7 @@ Player::Player() : fire(false), dt1(0), dt2(0), healthPoints(500), isDead(false)
 		std::cout << "ERROR LOADING WALKING SOUND" << std::endl;
 
 	walkSfx.setBuffer(walkSfxBuffer);
+	walkSfx.setVolume(80.f);
 }
 
 sf::Vector2f Player::getPlayerCenter()
@@ -52,7 +64,8 @@ sf::Vector2f Player::getPlayerCenter()
 
 bool Player::Move(float moveX, float moveY)
 {
-	float elapsed = movementTime.getElapsedTime().asSeconds() * 50;
+	float elapsed = movementTime.getElapsedTime().asSeconds() * 50.f;
+	float stepTime = stepTimer.getElapsedTime().asSeconds();
 	sf::Vector2f pos = player.getPosition();
 	if (moveX > 0 || moveY > 0) {
 		if (pos.x + moveX >= 1280)
@@ -69,9 +82,18 @@ bool Player::Move(float moveX, float moveY)
 
 	if (moveX == 0 && moveY == 0)
 		return false;
+
 	player.move(moveX * elapsed, moveY * elapsed);
 	if (walkSfx.getStatus() == 0)
 		walkSfx.play();
+	
+	if (stepTime > .1f) {
+		++stepCount;
+		stepTimer.restart();
+	}
+
+	stepCount = stepCount > 7 ? 0 : stepCount;
+	legs.setTextureRect(sf::IntRect(textSize.x * stepCount, textSize.y * 0, legsTSize.x, legsTSize.y));
 	return true;
 }
 
@@ -121,25 +143,27 @@ void Player::updatePlayer(sf::RenderWindow* window)
 	mousePosition = sf::Mouse::getPosition(*window);
 	worldPosition = window->mapPixelToCoords(mousePosition);
 
-	const float PI = float(3.141592653589793);
+	const float PI = 3.141592653589793f;
 
 	float a = worldPosition.x - currentPosition.x;
 	float b = worldPosition.y - currentPosition.y;
 
 	float rotation = (atan2(b, a)) * 180 / PI;
 
-	if (dt2 > 0.2)
+	if (dt2 > 0.2f)
 	{
 		fire = false;
 		clock2.restart();
 	}
 
 	movePlayer();
+
 	movementTime.restart();
 
-	player.setRotation(rotation + 90);
-	gun.setRotation(rotation + 90);
-	gunshot.setRotation(rotation + 90);
+	player.setRotation(rotation + 90.f);
+	gun.setRotation(rotation + 90.f);
+	gunshot.setRotation(rotation + 90.f);
+	legs.setRotation(rotation + 90.f);
 
 	if (dt1 > 2)
 	{
@@ -154,6 +178,7 @@ void Player::updatePlayer(sf::RenderWindow* window)
 
 	gun.setPosition(player.getPosition());
 	gunshot.setPosition(player.getPosition());
+	legs.setPosition(player.getPosition());
 }
 
 bool Player::getFireStatus()
@@ -192,4 +217,9 @@ sf::Sprite* Player::getGunSprite()
 sf::Sprite* Player::getGunshotSprite()
 {
 	return &gunshot;
+}
+
+sf::Sprite* Player::getLegsSprite()
+{
+	return &legs;
 }

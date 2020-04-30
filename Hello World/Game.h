@@ -31,6 +31,8 @@ private:
 	sf::Vector2f checkViewCenter();
 	void updatePlayer();
 	void updateWalls();
+	sf::Sound ricochetSfx;
+	sf::SoundBuffer ricochetBuffer;
 
 public:
 	Game();

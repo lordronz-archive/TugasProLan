@@ -1,6 +1,6 @@
 #include "Zombie.h"
 
-Zombie::Zombie() :speed(0.5), xPos(0), yPos(0)
+Zombie::Zombie() :speed(0.5), xPos(0), yPos(0), tiles{0}, healthPoints(100)
 {
 	if (!zombieTexture.loadFromFile("Textures/zombie.png"))
 		std::cout << "ERROR LOADING PLAYER TEXTURE" << std::endl;
@@ -14,7 +14,7 @@ Zombie::Zombie() :speed(0.5), xPos(0), yPos(0)
 	zombieSprite.setTextureRect(sf::IntRect(textSize.x * 0, textSize.y * 1, textSize.x, textSize.y));
 	zombieSprite.setPosition(sf::Vector2f(640, 300));
 
-	srand(time(0));
+	srand(static_cast<unsigned int>(time(NULL)));
 
 	std::ifstream file("tiles.txt");
 	if (file.is_open())
@@ -113,7 +113,7 @@ void Zombie::Move(sf::Vector2f playerPosition)
 		speed = 0.5;
 
 		//Rotate the Zombie relative to player position
-		const float PI = 3.14159265;
+		const float PI = 3.14159265f;
 
 		float rotation = (atan2(dy, dx)) * 180 / PI;
 
@@ -132,7 +132,7 @@ void Zombie::Move(sf::Vector2f playerPosition)
 
 		speed = 0.5;
 
-		const float PI = 3.14159265;
+		const float PI = 3.14159265f;
 
 		float rotation = (atan2(dy, dx)) * 180 / PI;
 
@@ -161,7 +161,7 @@ void Zombie::Move(sf::Vector2f playerPosition)
 
 		speed = 0.5;
 
-		const float PI = 3.14159265;
+		const float PI = 3.14159265f;
 
 		float rotation = (atan2(dy, dx)) * 180 / PI;
 

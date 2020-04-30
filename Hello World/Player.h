@@ -19,13 +19,18 @@ private:
 	sf::Sprite gun;
 	sf::Texture gunshotTexture;
 	sf::Sprite gunshot;
+	sf::Texture legsText;
+	sf::Sprite legs;
+	sf::Vector2u legsTSize;
 	sf::Clock clock1;
 	sf::Clock clock2;
+	sf::Clock stepTimer;
 	sf::Clock movementTime;
 	sf::SoundBuffer weaponSfxBuffer;
 	sf::Sound weaponSfx;
 	sf::SoundBuffer walkSfxBuffer;
 	sf::Sound walkSfx;
+	int stepCount;
 	void movePlayer();
 	bool Move(float moveX, float moveY);
 	float dt1;
@@ -38,6 +43,7 @@ public:
 	sf::Sprite* getPlayerSprite();
 	sf::Sprite* getGunSprite();
 	sf::Sprite* getGunshotSprite();
+	sf::Sprite* getLegsSprite();
 	sf::Vector2f getCharCoord();
 	sf::Vector2f getPlayerCenter();
 	sf::Vector2f getMousePos();

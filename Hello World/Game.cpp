@@ -13,8 +13,15 @@ Game::Game() :
 	textSize.y /= 2;
 	cursor.setTexture(cursorText);
 	cursor.setTextureRect(sf::IntRect(textSize.x * 0, textSize.y * 0, textSize.x, textSize.y));
-	cursor.setOrigin(textSize.x / 2, textSize.y / 2);
+	cursor.setOrigin(textSize.x / 2.0f, textSize.y / 2.0f);
 	cursor.setScale(0.25, 0.25);
+
+	if (!ricochetBuffer.loadFromFile("Sound/ricochet.ogg"))
+		std::cout << "ERROR LOADING RICOCHET SOUND" << std::endl;
+
+	ricochetSfx.setBuffer(ricochetBuffer);
+	ricochetSfx.setVolume(50.f);
+
 								//size							position
 	walls[0].initWall(sf::Vector2f(64.0f, 96.0f), sf::Vector2f(416.0f, 656.0f));
 	walls[1].initWall(sf::Vector2f(64.0f, 64.0f), sf::Vector2f(32.0f, 672.0f));
@@ -143,8 +150,11 @@ void Game::updateWalls() {
 		{
 			if (bullets[j].projectile.getGlobalBounds().intersects(walls[i].body.getGlobalBounds()))
 			{
+				float distance = sqrt(pow((player.getCharCoord().x - bullets[j].projectile.getPosition().x), 2) + pow((player.getCharCoord().y - bullets[j].projectile.getPosition().y), 2));
+				ricochetSfx.setVolume(std::max((100.f - distance / 8.f), 1.f));
 				bullets.erase(bullets.begin() + j);
 				bullets.shrink_to_fit();
+				ricochetSfx.play();
 			}
 		}
 	}
@@ -192,6 +202,7 @@ void Game::Render()
 		window.Draw(map);
 		for (size_t i = 0; i < zombies.size(); ++i)
 			window.Draw(zombies[i].zombieSprite);
+		window.Draw(*player.getLegsSprite());
 		window.Draw(*player.getPlayerSprite());
 		window.Draw(*player.getGunSprite());
 		if (player.getFireStatus())
@@ -223,4 +234,3 @@ void Game::Run()
 		Render();
 	}
 }
-

@@ -15,6 +15,7 @@ public:
     sf::Vector2f zombiePosition;
     Collider GetCollider();
     int tiles[23][40];
+    int healthPoints;
 
 private:
     int xPos;

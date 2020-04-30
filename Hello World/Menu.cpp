@@ -11,19 +11,22 @@ Menu::Menu()
 	menu[0].setFillColor(sf::Color::Red);
 	menu[0].setString("PLAY");
 	menu[0].setOrigin(sf::Vector2f(30, 0));
-	menu[0].setPosition(sf::Vector2f(1280 / 2, 720 / (MAX + 1) * 1.5));
+	menu[0].setPosition(sf::Vector2f(1280 / 2.0f, 720 / (MAX + 1) * 1.5f));
+	menu[0].setOutlineThickness(3.f);
 
 	menu[1].setFont(font);
 	menu[1].setFillColor(sf::Color::White);
 	menu[1].setString("OPTION");
 	menu[1].setOrigin(sf::Vector2f(45, 0));
-	menu[1].setPosition(sf::Vector2f(1280 / 2, 720 / (MAX + 1) * 2.5));
+	menu[1].setPosition(sf::Vector2f(1280 / 2.0f, 720 / (MAX + 1) * 2.5f));
+	menu[1].setOutlineThickness(3.f);
 
 	menu[2].setFont(font);
 	menu[2].setFillColor(sf::Color::White);
 	menu[2].setString("EXIT");
 	menu[2].setOrigin(sf::Vector2f(30, 0));
-	menu[2].setPosition(sf::Vector2f(1280 / 2, 720 / (MAX + 1) * 3.5));
+	menu[2].setPosition(sf::Vector2f(1280 / 2.0f, 720 / (MAX + 1) * 3.5f));
+	menu[2].setOutlineThickness(3.f);
 
 	menuBar[0].position = sf::Vector2f(0, menu[0].getPosition().y);
 	menuBar[0].color = sf::Color(49, 247, 148, 128);
@@ -31,10 +34,10 @@ Menu::Menu()
 	menuBar[1].position = sf::Vector2f(1280, menu[0].getPosition().y);
 	menuBar[1].color = sf::Color(49, 247, 148, 128);
 
-	menuBar[2].position = sf::Vector2f(1280, menu[0].getPosition().y + 1.5 * menu[0].getCharacterSize());
+	menuBar[2].position = sf::Vector2f(1280, menu[0].getPosition().y + 1.5f * menu[0].getCharacterSize());
 	menuBar[2].color = sf::Color(43, 126, 227, 128);
 	
-	menuBar[3].position = sf::Vector2f(0, menu[0].getPosition().y + 1.5 * menu[0].getCharacterSize());
+	menuBar[3].position = sf::Vector2f(0, menu[0].getPosition().y + 1.5f * menu[0].getCharacterSize());
 	menuBar[3].color = sf::Color(43, 126, 227, 128);
 
 	if (!menuSfxBuffer.loadFromFile("Sound/dmc_menu_select.wav"))
@@ -92,10 +95,10 @@ void Menu::moveUp()
 		menuBar[1].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y);
 		menuBar[1].color = sf::Color(49, 247, 148, 128);
 
-		menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+		menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 		menuBar[2].color = sf::Color(43, 126, 227, 128);
 
-		menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+		menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 		menuBar[3].color = sf::Color(43, 126, 227, 128);
 	}
 	else
@@ -110,10 +113,10 @@ void Menu::moveUp()
 		menuBar[1].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y);
 		menuBar[1].color = sf::Color(49, 247, 148, 128);
 
-		menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+		menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 		menuBar[2].color = sf::Color(43, 126, 227, 128);
 
-		menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+		menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 		menuBar[3].color = sf::Color(43, 126, 227, 128);
 	}
 }
@@ -130,9 +133,9 @@ void Menu::moveDown()
 
 		menuBar[1].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y);
 
-		menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+		menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 
-		menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+		menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 	}
 	else
 	{
@@ -144,9 +147,9 @@ void Menu::moveDown()
 
 		menuBar[1].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y);
 
-		menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+		menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 
-		menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+		menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 	}
 }
 
@@ -176,9 +179,9 @@ void Menu::mouseSelect(sf::RenderWindow *window, bool play)
 
 			menuBar[1].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y);
 
-			menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+			menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 
-			menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+			menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 
 			menu[1].setFillColor(sf::Color::White);
 			menu[2].setFillColor(sf::Color::White);
@@ -201,9 +204,9 @@ void Menu::mouseSelect(sf::RenderWindow *window, bool play)
 
 			menuBar[1].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y);
 
-			menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+			menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 
-			menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+			menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 
 			menu[selectedItemIndex].setFillColor(sf::Color::Red);
 			menu[0].setFillColor(sf::Color::White);
@@ -218,9 +221,9 @@ void Menu::mouseSelect(sf::RenderWindow *window, bool play)
 
 			menuBar[1].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y);
 
-			menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+			menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 
-			menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5 * menu[selectedItemIndex].getCharacterSize());
+			menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 
 			menu[selectedItemIndex].setFillColor(sf::Color::Red);
 			menu[0].setFillColor(sf::Color::White);
