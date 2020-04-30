@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player() : fire(false), dt1(0), dt2(0)
+Player::Player() : fire(false), dt1(0), dt2(0), healthPoints(500), isDead(false)
 {
 	// Setting up class members.
 	if (!playerTexture.loadFromFile("Textures/ct1.bmp"))
@@ -43,23 +43,6 @@ Player::Player() : fire(false), dt1(0), dt2(0)
 		std::cout << "ERROR LOADING WALKING SOUND" << std::endl;
 
 	walkSfx.setBuffer(walkSfxBuffer);
-
-	/*std::ifstream file("tiles.txt");
-	if (file.is_open())
-	{
-		int i = 0;
-		int j = 0;
-		while (file >> tiles[i][j])
-		{
-			++j;
-			if (j % 40 == 0)
-			{
-				++i;
-				j = 0;
-			}
-		}
-	}
-	file.close();*/
 }
 
 sf::Vector2f Player::getPlayerCenter()

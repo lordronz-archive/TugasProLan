@@ -9,11 +9,12 @@
 class Zombie
 {
 public:
-    Zombie(int tiles[23][40]);
+    Zombie();
     sf::Sprite zombieSprite;
     void Move(sf::Vector2f playerPosition);
     sf::Vector2f zombiePosition;
     Collider GetCollider();
+    int tiles[23][40];
 
 private:
     int xPos;
@@ -23,10 +24,7 @@ private:
     sf::Vector2f direction;
     sf::Vector2f normalizedDir;
     bool wallCheck(sf::Vector2f destination);
-    int tiles[23][40];
     sf::Vector2f playerLocB4Lost;
-    bool idle;
-    sf::Vector2f zombieMovCheck;
     sf::Vector2f randomLoc;
     sf::Clock clock0;
 };

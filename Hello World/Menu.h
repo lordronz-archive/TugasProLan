@@ -17,7 +17,6 @@ public:
 	Menu();
 	~Menu();
 	sf::Text* menuDraw();
-	sf::Text* menuTitleDraw();
 	void moveUp();
 	void moveDown();
 	void mouseSelect(sf::RenderWindow *window, bool play);
@@ -31,7 +30,6 @@ private:
 	int selectedItemIndex;
 	sf::Font font;
 	sf::Text menu[MAX];
-	sf::Text menuTitle;
 	sf::SoundBuffer menuSfxBuffer;
 	sf::Sound menuSfx;
 	sf::Texture menuBg;

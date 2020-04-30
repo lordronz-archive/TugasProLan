@@ -6,26 +6,7 @@ Game::Game() :
 	if (!cursorText.loadFromFile("Textures/pointer.png"))
 		std::cout << "ERROR LOADING CURSOR TEXTURE" << std::endl;
 
-	std::ifstream file("tiles.txt");
-	if (file.is_open())
-	{
-		int i = 0;
-		int j = 0;
-		while (file >> this->tiles[i][j])
-		{
-			++j;
-			if (j % 40 == 0)
-			{
-				++i;
-				j = 0;
-			}
-		}
-	}
-	file.close();
-
-	zombie = new Zombie(tiles);
-
-	zombies.push_back(*zombie);
+	zombies.push_back(zombie);
 
 	sf::Vector2u textSize = cursorText.getSize();
 	textSize.x /= 2;
@@ -101,7 +82,6 @@ Game::Game() :
 Game::~Game() {
 	zombies = std::vector<Zombie>();
 	bullets = std::vector<Bullet>();
-	delete zombie;
 }
 
 sf::Vector2f Game::checkViewCenter() {
@@ -205,7 +185,7 @@ void Game::Update() {
 
 void Game::Render()
 {
-	//window.View(view);
+	window.View(view);
 	window.BeginDraw();
 	if (window.checkIfBegin())
 	{

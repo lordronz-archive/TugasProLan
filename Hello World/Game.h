@@ -18,7 +18,7 @@ private:
 	Player player;
 	Window window;
 	Bullet b1;
-	Zombie *zombie;
+	Zombie zombie;
 	std::vector<Zombie> zombies;
 	std::vector<Bullet> bullets;
 	Map map;
@@ -40,7 +40,6 @@ public:
 	void Render();
 	Window* GetWindow();
 	void Run();
-	int tiles[23][40];
 };
 
 #endif

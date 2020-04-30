@@ -4,7 +4,6 @@
 
 #include "Window.h"
 #include "Collider.h"
-#include <fstream>
 
 class Player
 {
@@ -32,7 +31,6 @@ private:
 	float dt1;
 	float dt2;
 	bool fire;
-	int tiles[23][40];
 
 public:
 	Player();
@@ -45,6 +43,8 @@ public:
 	sf::Vector2f getMousePos();
 	bool getFireStatus();
 	Collider GetCollider();
+	int healthPoints;
+	bool isDead;
 };
 
 #endif

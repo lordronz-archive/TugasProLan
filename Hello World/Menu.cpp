@@ -7,13 +7,6 @@ Menu::Menu()
 	if (!font.loadFromFile("DoubleFeature.ttf"))
 		std::cout << "Error Loading Font" << std::endl;
 
-	menuTitle.setFont(font);
-	menuTitle.setFillColor(sf::Color::Red);
-	menuTitle.setString("HELLO WORLD");
-	menuTitle.setCharacterSize(50);
-	menuTitle.setOrigin(sf::Vector2f(137.5, 0));
-	menuTitle.setPosition(sf::Vector2f((1280 / 2), 720 / (MAX + 5)));
-
 	menu[0].setFont(font);
 	menu[0].setFillColor(sf::Color::Red);
 	menu[0].setString("PLAY");
@@ -58,11 +51,6 @@ Menu::~Menu(){}
 sf::VertexArray* Menu::drawMenuBar()
 {
 	return &menuBar;
-}
-
-sf::Text* Menu::menuTitleDraw()
-{
-	return &menuTitle;
 }
 
 sf::Text* Menu::menuDraw()

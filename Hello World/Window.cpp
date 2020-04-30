@@ -119,7 +119,6 @@ void Window::Draw(sf::Drawable& l_drawable)
 	{
 		window.draw(sf::Sprite(*menu.drawMenuBg()));
 		window.draw(*menu.drawMenuBar());
-		window.draw(*menu.menuTitleDraw());
 		for (int i = 0; i < 3; ++i)
 		{
 			window.draw(menu.menuDraw()[i]);

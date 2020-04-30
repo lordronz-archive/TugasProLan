@@ -1,6 +1,6 @@
 #include "Zombie.h"
 
-Zombie::Zombie(int tiles[23][40]) :speed(0.5), xPos(0), yPos(0), idle(true)
+Zombie::Zombie() :speed(0.5), xPos(0), yPos(0)
 {
 	if (!zombieTexture.loadFromFile("Textures/zombie.png"))
 		std::cout << "ERROR LOADING PLAYER TEXTURE" << std::endl;
@@ -13,16 +13,15 @@ Zombie::Zombie(int tiles[23][40]) :speed(0.5), xPos(0), yPos(0), idle(true)
 	zombieSprite.setTexture(zombieTexture);
 	zombieSprite.setTextureRect(sf::IntRect(textSize.x * 0, textSize.y * 1, textSize.x, textSize.y));
 	zombieSprite.setPosition(sf::Vector2f(640, 300));
-	zombieMovCheck = zombieSprite.getPosition();
 
 	srand(time(0));
-	/*
+
 	std::ifstream file("tiles.txt");
 	if (file.is_open())
 	{
 		int i = 0;
 		int j = 0;
-		while (file >> tiles[i][j])
+		while (file >> this->tiles[i][j])
 		{
 			++j;
 			if (j % 40 == 0)
@@ -33,15 +32,6 @@ Zombie::Zombie(int tiles[23][40]) :speed(0.5), xPos(0), yPos(0), idle(true)
 		}
 	}
 	file.close();
-	*/
-	for (size_t i = 0; i < 23; ++i)
-	{
-		for (size_t j = 0; j < 40; ++j)
-		{
-			this->tiles[i][j] = tiles[i][j];
-			std::cout << this->tiles[i][j] << std::endl;
-		}
-	}
 }
 
 bool Zombie::wallCheck(sf::Vector2f destination)
@@ -51,10 +41,10 @@ bool Zombie::wallCheck(sf::Vector2f destination)
 
 	float deltaX = zombieSprite.getPosition().x - destination.x;
 	float deltaY = zombieSprite.getPosition().y - destination.y;
-	int zombieTileX = (int)(zombieSprite.getPosition().x / 32);
-	int zombieTileY = (int)(zombieSprite.getPosition().y / 32);
-	int playerTileX = (int)(destination.x / 32);
-	int playerTileY = (int)(destination.y / 32);
+	int zombieTileX = static_cast<int>(zombieSprite.getPosition().x / 32);
+	int zombieTileY = static_cast<int>(zombieSprite.getPosition().y / 32);
+	int playerTileX = static_cast<int>(destination.x / 32);
+	int playerTileY = static_cast<int>(destination.y / 32);
 	int obs[] = {1, 2, 3, 4, 5, 6, 7};
 
 	if (deltaX > 0)
