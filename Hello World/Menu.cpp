@@ -5,7 +5,7 @@ Menu::Menu()
 {
 
 	if (!font.loadFromFile("DoubleFeature.ttf"))
-		std::cout << "Error Loading Font" << std::endl;
+		std::cout << "ERROR LOADING FONT" << std::endl;
 
 	menu[0].setFont(font);
 	menu[0].setFillColor(sf::Color::Red);

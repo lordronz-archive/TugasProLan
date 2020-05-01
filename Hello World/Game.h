@@ -9,6 +9,7 @@
 #include "Bullet.h"
 #include "Wall.h"
 #include "Zombie.h"
+#include "GUI.h"
 
 #include <array>
 
@@ -18,7 +19,8 @@ private:
 	Player player;
 	Window window;
 	Bullet b1;
-	Zombie zombie;
+	Zombie *zombie;
+	GUI GUI;
 	std::vector<Zombie> zombies;
 	std::vector<Bullet> bullets;
 	Map map;

@@ -84,7 +84,6 @@ bool Player::Move(float moveX, float moveY)
 		++stepCount;
 		stepTimer.restart();
 	}
-
 	stepCount = stepCount > 7 ? 0 : stepCount;
 	legs.setTextureRect(sf::IntRect(textSize.x * stepCount, textSize.y * 0, legsTSize.x, legsTSize.y));
 	return true;

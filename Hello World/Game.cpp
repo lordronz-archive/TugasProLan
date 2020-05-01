@@ -1,12 +1,13 @@
 #include "Game.h"
 
 Game::Game() :
-	view(sf::View(sf::FloatRect(640, 360, 256, 144))), walls {wall}
+	view(sf::View(sf::FloatRect(640, 360, 256, 144))), walls {wall}, zombieShot(false)
 {
 	if (!cursorText.loadFromFile("Textures/pointer.png"))
 		std::cout << "ERROR LOADING CURSOR TEXTURE" << std::endl;
 
-	zombies.push_back(zombie);
+	zombie = new Zombie;
+	zombies.push_back(*zombie);
 
 	sf::Vector2u textSize = cursorText.getSize();
 	textSize.x /= 2;
@@ -88,6 +89,7 @@ Game::Game() :
 Game::~Game() {
 	zombies = std::vector<Zombie>();
 	bullets = std::vector<Bullet>();
+	delete zombie;
 }
 
 sf::Vector2f Game::checkViewCenter() {
@@ -113,6 +115,8 @@ void Game::updatePlayer() {
 	sf::Vector2f playerPos = player.getCharCoord();
 	player.updatePlayer(win);
 	
+	GUI.setHealth(player.healthPoints, checkViewCenter());
+
 	//fire
 	if (player.fire && !player.isFiring) {
 		b1.fire(win, playerPos);
@@ -127,7 +131,6 @@ void Game::updatePlayer() {
 			bullets.erase(bullets.begin() + i);
 			bullets.shrink_to_fit();
 		}
-		
 	}
 }
 
@@ -155,14 +158,18 @@ void Game::updateZombie(sf::Vector2f playerPos)
 	for (size_t i = 0; i < zombies.size(); ++i) {
 		if (sqrt(pow((zombies[i].zombiePosition.x - playerPos.x), 2) + pow((zombies[i].zombiePosition.y - playerPos.y), 2)) > 20)
 			zombies[i].Move(playerPos);
+		else {
+			if (zombies[i].attack())
+			player.healthPoints -= 20;
+		}
 		for (size_t j = 0; j < bullets.size(); ++j) {
-			if (bullets[i].projectile.getGlobalBounds().intersects(zombies[j].zombieSprite.getGlobalBounds())) {
-				bullets.erase(bullets.begin() + i);
+			if (bullets[j].projectile.getGlobalBounds().intersects(zombies[i].zombieSprite.getGlobalBounds())) {
+				bullets.erase(bullets.begin() + j);
 				bullets.shrink_to_fit();
 				zombieShot = true;
 			}
 		}
-		zombies[i].update(zombieShot);
+		zombies[i].update(zombieShot, playerPos);
 	}	
 }
 
@@ -200,18 +207,21 @@ void Game::Render()
 	if (window.checkIfBegin()) {
 		window.Draw(map);
 		for (size_t i = 0; i < zombies.size(); ++i) {
-			window.Draw(zombies[i].zombieSprite);
-			if (zombies[i].bloodSplattered)
-				window.Draw(zombies[i].blood);
+			if (zombies[i].zombieSprite.getPosition().x < (checkViewCenter().x + 150) && zombies[i].zombieSprite.getPosition().x >(checkViewCenter().x - 150) && zombies[i].zombieSprite.getPosition().y < (checkViewCenter().y + 90) && zombies[i].zombieSprite.getPosition().y >(checkViewCenter().y - 90)) {
+				window.Draw(zombies[i].zombieSprite);
+				if (zombies[i].bloodSplattered)
+					window.Draw(zombies[i].blood);
+			}
 		}
 		window.Draw(*player.getLegsSprite());
 		window.Draw(*player.getPlayerSprite());
 		window.Draw(*player.getGunSprite());
 		for (size_t i = 0; i < bullets.size(); ++i) {
-			if (bullets[i].projectile.getPosition().x < (checkViewCenter().x + 128) || bullets[i].projectile.getPosition().x > (checkViewCenter().x - 128) || bullets[i].projectile.getPosition().y < (checkViewCenter().y + 72) || bullets[i].projectile.getPosition().y > (checkViewCenter().y - 72))
+			if (bullets[i].projectile.getPosition().x < (checkViewCenter().x + 128) && bullets[i].projectile.getPosition().x > (checkViewCenter().x - 128) && bullets[i].projectile.getPosition().y < (checkViewCenter().y + 72) && bullets[i].projectile.getPosition().y > (checkViewCenter().y - 72))
 				window.Draw(bullets[i].projectile);
 		}
 		window.Draw(cursor);
+		window.Draw(*GUI.getHealthGUI());
 	}
 	//for drawing in main menu
 	else

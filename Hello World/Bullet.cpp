@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet() :projectile(sf::CircleShape(.8f)), currVelocity(0.0f, 0.0f), maxSpeed(35.f)
+Bullet::Bullet() :projectile(sf::CircleShape(5.8f)), currVelocity(0.0f, 0.0f), maxSpeed(35.f)
 {
 	projectile.setFillColor(sf::Color::Black);
 	projectile.setOrigin(projectile.getRadius(), projectile.getRadius());

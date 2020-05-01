@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Collider.h"
 #include <fstream>
+#include <SFML/Audio.hpp>
 
 class Zombie
 {
@@ -13,7 +14,8 @@ public:
     sf::Sprite zombieSprite;
     sf::Sprite blood;
     void Move(sf::Vector2f playerPosition);
-    void update(bool shot);
+    void update(bool shot, sf::Vector2f playerPosition);
+    bool attack();
     sf::Vector2f zombiePosition;
     Collider GetCollider();
     int tiles[23][40];
@@ -35,7 +37,11 @@ private:
     sf::Clock clock0;
     sf::Clock bloodTimer;
     sf::Clock shotTimer;
+    sf::Clock attackTimer;
+    sf::SoundBuffer zombieHurtBuffer;
+    sf::Sound zombieHurt;
     int bloodCount;
+    int attackCount;
 };
 
 #endif // !ZOMBIE_H

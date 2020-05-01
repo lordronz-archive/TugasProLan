@@ -1,9 +1,9 @@
 #include "Zombie.h"
 
-Zombie::Zombie() :speed(0.5), xPos(0), yPos(0), tiles{0}, healthPoints(100), bloodCount(0), bloodSplattered(false)
+Zombie::Zombie() :speed(0.5), xPos(0), yPos(0), tiles{0}, healthPoints(100), bloodCount(0), bloodSplattered(false), attackCount(0)
 {
 	if (!zombieTexture.loadFromFile("Textures/zombie.png"))
-		std::cout << "ERROR LOADING PLAYER TEXTURE" << std::endl;
+		std::cout << "ERROR LOADING ZOMBIE TEXTURE" << std::endl;
 
 	zombieTexture.setSmooth(true);
 	sf::Vector2u textSize = zombieTexture.getSize();
@@ -26,11 +26,14 @@ Zombie::Zombie() :speed(0.5), xPos(0), yPos(0), tiles{0}, healthPoints(100), blo
 	blood.setPosition(zombieSprite.getPosition());
 	blood.setScale(0.5f, 0.5f);
 
+	if (!zombieHurtBuffer.loadFromFile("Sound/ZombieHurt.ogg"))
+		std::cout << "ERROR LOADING ZOMBIE SOUND" << std::endl;
+	zombieHurt.setBuffer(zombieHurtBuffer);
+
 	srand(static_cast<unsigned int>(time(NULL)));
 
 	std::ifstream file("tiles.txt");
-	if (file.is_open())
-	{
+	if (file.is_open()) {
 		int i = 0;
 		int j = 0;
 		while (file >> this->tiles[i][j])
@@ -122,7 +125,7 @@ void Zombie::Move(sf::Vector2f playerPosition)
 		direction = playerPosition - zombiePosition;
 		normalizedDir = direction / sqrt(pow(direction.x, 2) + pow(direction.y, 2));
 
-		speed = 0.5;
+		speed = .8f;
 
 		//Rotate the Zombie relative to player position
 		const float PI = 3.14159265f;
@@ -142,7 +145,7 @@ void Zombie::Move(sf::Vector2f playerPosition)
 		direction = playerLocB4Lost - zombiePosition;
 		normalizedDir = direction / sqrt(pow(direction.x, 2) + pow(direction.y, 2));
 
-		speed = 0.5;
+		speed = .8f;
 
 		const float PI = 3.14159265f;
 
@@ -183,11 +186,17 @@ void Zombie::Move(sf::Vector2f playerPosition)
 
 		zombieSprite.move(currentSpeed);
 	}
+	zombieSprite.setTextureRect(sf::IntRect(zombieTexture.getSize().x / 2 * 0, zombieTexture.getSize().y / 3 * 1, zombieTexture.getSize().x / 2, zombieTexture.getSize().y / 3));
+	attackTimer.restart();
 }
 
-void Zombie::update(bool shot)
+void Zombie::update(bool shot, sf::Vector2f playerPosition)
 {
-	bloodSplattered = shotTimer.getElapsedTime().asSeconds() > 1.0f && !shot ? false : true;
+	float distance = sqrt(pow((playerPosition.x - zombieSprite.getPosition().x), 2) + pow((playerPosition.y - zombieSprite.getPosition().y), 2));
+	std::cout << shot << std::endl;
+	
+	if (bloodSplattered && shotTimer.getElapsedTime().asSeconds() > 1.0f)
+		bloodSplattered = false;
 	
 	blood.setPosition(zombieSprite.getPosition());
 	if (bloodTimer.getElapsedTime().asSeconds() > .2f) {
@@ -199,7 +208,22 @@ void Zombie::update(bool shot)
 	if (shot) {
 		bloodSplattered = true;
 		shotTimer.restart();
+		zombieHurt.setVolume(std::max((100.f - distance / 5.f), 1.f));
+		zombieHurt.play();
 	}
+}
+
+bool Zombie::attack()
+{
+	bool attacking = false;
+	if (attackTimer.getElapsedTime().asSeconds() > .5f) {
+		++attackCount;
+		attackTimer.restart();
+		attacking = true;
+	}
+	attackCount = attackCount > 1 ? 0 : attackCount;
+	zombieSprite.setTextureRect(sf::IntRect(zombieTexture.getSize().x / 2 * attackCount, zombieTexture.getSize().y / 3 * 1, zombieTexture.getSize().x / 2, zombieTexture.getSize().y / 3));
+	return attacking;
 }
 
 Collider Zombie::GetCollider()
