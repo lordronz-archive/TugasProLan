@@ -12,7 +12,7 @@ Window::~Window(){}
 
 void Window::BeginDraw()
 {
-	window.clear(sf::Color(sf::Color::Black));
+	window.clear();
 }
 
 void Window::EndDraw()

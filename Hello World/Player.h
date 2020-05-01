@@ -17,8 +17,6 @@ private:
 	sf::Vector2f worldPosition;
 	sf::Texture gunTexture;
 	sf::Sprite gun;
-	sf::Texture gunshotTexture;
-	sf::Sprite gunshot;
 	sf::Texture legsText;
 	sf::Sprite legs;
 	sf::Vector2u legsTSize;
@@ -35,22 +33,22 @@ private:
 	bool Move(float moveX, float moveY);
 	float dt1;
 	float dt2;
-	bool fire;
 
 public:
 	Player();
 	void updatePlayer(sf::RenderWindow* window);
 	sf::Sprite* getPlayerSprite();
 	sf::Sprite* getGunSprite();
-	sf::Sprite* getGunshotSprite();
 	sf::Sprite* getLegsSprite();
+	sf::Texture* getPlayerTexture();
 	sf::Vector2f getCharCoord();
 	sf::Vector2f getPlayerCenter();
 	sf::Vector2f getMousePos();
-	bool getFireStatus();
 	Collider GetCollider();
 	int healthPoints;
 	bool isDead;
+	bool isFiring;
+	bool fire;
 };
 
 #endif

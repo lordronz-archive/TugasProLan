@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player() : fire(false), dt1(0), dt2(0), healthPoints(500), isDead(false), stepCount(0)
+Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(500), isDead(false), stepCount(0)
 {
 	// Setting up class members.
 	if (!playerTexture.loadFromFile("Textures/ct1.bmp"))
@@ -17,29 +17,22 @@ Player::Player() : fire(false), dt1(0), dt2(0), healthPoints(500), isDead(false)
 	player.setTextureRect(sf::IntRect(textSize.x * 0, textSize.y * 2, textSize.x, textSize.y));
 	player.setPosition(sf::Vector2f(640, 360));
 
-	if (!gunTexture.loadFromFile("Textures/awp.png"))
+	if (!gunTexture.loadFromFile("Textures/awpfinal.png"))
 		std::cout << "ERROR LOADING GUN TEXTURE" << std::endl;
 
 	gunTexture.setSmooth(true);
 	gun.setTexture(gunTexture);
-	gun.setScale(sf::Vector2f(0.40f, 0.40f));
-	gun.setOrigin(gunTexture.getSize().x / 2.0f, gunTexture.getSize().y + 5.f);
-	gun.setPosition(player.getPosition().x, player.getPosition().y);
-
-	if (!gunshotTexture.loadFromFile("Textures/gunshot.png"))
-		std::cout << "ERROR LOADING GUNSHOT TEXTURE" << std::endl;
-
-	gunshot.setTexture(gunshotTexture);
-	gunshot.setScale(sf::Vector2f(0.5, 0.5));
-	gunshot.setOrigin(gunshotTexture.getSize().x / 2.0f, gunshotTexture.getSize().y + 45.f);
-	gunshot.setPosition(player.getPosition().x, player.getPosition().y);
+	gun.setTextureRect(sf::IntRect((gunTexture.getSize().x / 2) * 1, gunTexture.getSize().y * 0, gunTexture.getSize().x / 2, gunTexture.getSize().y));
+	gun.setScale(sf::Vector2f(.4f, .4f));
+	gun.setOrigin(sf::Vector2f((gunTexture.getSize().x / 4.f), (gunTexture.getSize().y / 2.f + 50.f)));
+	gun.setPosition(player.getPosition());
 
 	if (!legsText.loadFromFile("Textures/legs.bmp"))
 		std::cout << "ERROR LOADING PLAYER TEXTURE" << std::endl;
 	legsTSize = legsText.getSize();
 	legsTSize.x /= 8;
 	legsTSize.y /= 2;
-	legs.setScale(sf::Vector2f(0.4, 0.4));
+	legs.setScale(sf::Vector2f(.3f, .3f));
 	legs.setOrigin(sf::Vector2f(legsTSize.x / 2.0f, legsTSize.y / 2.0f));
 	legs.setTexture(legsText);
 	legs.setTextureRect(sf::IntRect(textSize.x * 0, textSize.y * 0, legsTSize.x, legsTSize.y));
@@ -137,6 +130,7 @@ void Player::updatePlayer(sf::RenderWindow* window)
 {
 	dt1 = clock1.getElapsedTime().asSeconds();
 	dt2 = clock2.getElapsedTime().asSeconds();
+	isFiring = fire;
 
 	sf::Vector2u windSize = sf::Vector2u(1280, 720);
 	sf::Vector2f currentPosition = player.getPosition();
@@ -153,6 +147,7 @@ void Player::updatePlayer(sf::RenderWindow* window)
 	if (dt2 > 0.2f)
 	{
 		fire = false;
+		gun.setTextureRect(sf::IntRect((gunTexture.getSize().x / 2) * 1, gunTexture.getSize().y * 0, gunTexture.getSize().x / 2, gunTexture.getSize().y));
 		clock2.restart();
 	}
 
@@ -162,7 +157,6 @@ void Player::updatePlayer(sf::RenderWindow* window)
 
 	player.setRotation(rotation + 90.f);
 	gun.setRotation(rotation + 90.f);
-	gunshot.setRotation(rotation + 90.f);
 	legs.setRotation(rotation + 90.f);
 
 	if (dt1 > 2)
@@ -171,19 +165,14 @@ void Player::updatePlayer(sf::RenderWindow* window)
 		{
 			fire = true;
 			weaponSfx.play();
+			gun.setTextureRect(sf::IntRect((gunTexture.getSize().x / 2) * 0, gunTexture.getSize().y * 0, gunTexture.getSize().x / 2, gunTexture.getSize().y));
 			clock1.restart();
 			clock2.restart();
 		}
 	}
 
 	gun.setPosition(player.getPosition());
-	gunshot.setPosition(player.getPosition());
 	legs.setPosition(player.getPosition());
-}
-
-bool Player::getFireStatus()
-{
-	return fire;
 }
 
 Collider Player::GetCollider()
@@ -214,12 +203,12 @@ sf::Sprite* Player::getGunSprite()
 	return &gun;
 }
 
-sf::Sprite* Player::getGunshotSprite()
-{
-	return &gunshot;
-}
-
 sf::Sprite* Player::getLegsSprite()
 {
 	return &legs;
+}
+
+sf::Texture* Player::getPlayerTexture()
+{
+	return &playerTexture;
 }

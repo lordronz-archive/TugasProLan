@@ -87,7 +87,7 @@ void Menu::moveUp()
 	{
 		menuSfx.play();
 		menu[selectedItemIndex].setFillColor(sf::Color::White);
-		selectedItemIndex--;
+		--selectedItemIndex;
 		menu[selectedItemIndex].setFillColor(sf::Color::Red);
 		menuBar[0].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y);
 		menuBar[0].color = sf::Color(49, 247, 148, 128);
@@ -127,7 +127,7 @@ void Menu::moveDown()
 	{
 		menuSfx.play();
 		menu[selectedItemIndex].setFillColor(sf::Color::White);
-		selectedItemIndex++;
+		++selectedItemIndex;
 		menu[selectedItemIndex].setFillColor(sf::Color::Red);
 		menuBar[0].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y);
 

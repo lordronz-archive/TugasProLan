@@ -25,14 +25,15 @@ private:
 	std::array<Wall, 25> walls;
 	Wall wall;
 	sf::View view;
-	sf::Clock clock;
 	sf::Texture cursorText;
 	sf::Sprite cursor;
 	sf::Vector2f checkViewCenter();
 	void updatePlayer();
 	void updateWalls();
+	void updateZombie(sf::Vector2f playerPos);
 	sf::Sound ricochetSfx;
 	sf::SoundBuffer ricochetBuffer;
+	bool zombieShot;
 
 public:
 	Game();

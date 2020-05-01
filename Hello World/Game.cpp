@@ -54,7 +54,6 @@ Game::Game() :
 	walls[23].initWall(sf::Vector2f(160.0f, 96.0f), sf::Vector2f(848.0f, 272.0f));
 	walls[24].initWall(sf::Vector2f(64.0f, 224.0f), sf::Vector2f(898.0f, 432.0f));
 
-	
 	const int tiles[] =
 	{	//1 tile = 32 * 32 pixel
 	//	1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40
@@ -112,25 +111,18 @@ sf::Vector2f Game::checkViewCenter() {
 void Game::updatePlayer() {
 	sf::RenderWindow* win = window.getWindow();
 	sf::Vector2f playerPos = player.getCharCoord();
-	float dt = clock.getElapsedTime().asSeconds();
 	player.updatePlayer(win);
-	if (dt > 2)
-	{
-		//fire
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			b1.fire(win, playerPos);
-			bullets.push_back(Bullet(b1));
-
-			clock.restart();
-		}
+	
+	//fire
+	if (player.fire && !player.isFiring) {
+		b1.fire(win, playerPos);
+		bullets.push_back(Bullet(b1));
 	}
-	for (size_t i = 0; i < bullets.size(); ++i)
-	{
+
+	for (size_t i = 0; i < bullets.size(); ++i) {
 		bullets[i].projectile.move(bullets[i].currVelocity);
 		if (bullets[i].projectile.getPosition().x < 0 || bullets[i].projectile.getPosition().x > 1280
-			|| bullets[i].projectile.getPosition().y < 0 || bullets[i].projectile.getPosition().y > 720)
-		{
+			|| bullets[i].projectile.getPosition().y < 0 || bullets[i].projectile.getPosition().y > 720) {
 			//removing bullets out of the map
 			bullets.erase(bullets.begin() + i);
 			bullets.shrink_to_fit();
@@ -141,17 +133,14 @@ void Game::updatePlayer() {
 
 void Game::updateWalls() {
 	//Wall Collision
-	for (size_t i = 0; i < walls.size(); ++i)
-	{
+	for (size_t i = 0; i < walls.size(); ++i) {
 		walls[i].GetCollider().checkCollision(player.GetCollider());
 		for (size_t j = 0; j < zombies.size(); ++j)
 			walls[i].GetCollider().checkCollision(zombies[j].GetCollider());
-		for (size_t j = 0; j < bullets.size(); ++j)
-		{
-			if (bullets[j].projectile.getGlobalBounds().intersects(walls[i].body.getGlobalBounds()))
-			{
+		for (size_t j = 0; j < bullets.size(); ++j) {
+			if (bullets[j].projectile.getGlobalBounds().intersects(walls[i].body.getGlobalBounds())) {
 				float distance = sqrt(pow((player.getCharCoord().x - bullets[j].projectile.getPosition().x), 2) + pow((player.getCharCoord().y - bullets[j].projectile.getPosition().y), 2));
-				ricochetSfx.setVolume(std::max((100.f - distance / 8.f), 1.f));
+				ricochetSfx.setVolume(std::max((100.f - distance / 5.f), 1.f));
 				bullets.erase(bullets.begin() + j);
 				bullets.shrink_to_fit();
 				ricochetSfx.play();
@@ -160,28 +149,39 @@ void Game::updateWalls() {
 	}
 }
 
+void Game::updateZombie(sf::Vector2f playerPos)
+{
+	zombieShot = false;
+	for (size_t i = 0; i < zombies.size(); ++i) {
+		if (sqrt(pow((zombies[i].zombiePosition.x - playerPos.x), 2) + pow((zombies[i].zombiePosition.y - playerPos.y), 2)) > 20)
+			zombies[i].Move(playerPos);
+		for (size_t j = 0; j < bullets.size(); ++j) {
+			if (bullets[i].projectile.getGlobalBounds().intersects(zombies[j].zombieSprite.getGlobalBounds())) {
+				bullets.erase(bullets.begin() + i);
+				bullets.shrink_to_fit();
+				zombieShot = true;
+			}
+		}
+		zombies[i].update(zombieShot);
+	}	
+}
+
 void Game::Update() {
 	
 	window.Update(); // Update window events.
 
 	if (window.checkIfBegin())
 	{
-		sf::Vector2f playerPos = player.getCharCoord();
 		cursor.setPosition(player.getMousePos());
 
 		updatePlayer();
-		
+		updateZombie(player.getCharCoord());
 		updateWalls();
 
 		//set view relative to player
 		view.setSize(sf::Vector2f(256, 144));
 		view.setCenter(checkViewCenter());
 
-		for (size_t i = 0; i < zombies.size(); ++i)
-		{
-			if (!player.getPlayerSprite()->getGlobalBounds().intersects(zombies[i].zombieSprite.getGlobalBounds()))
-				zombies[i].Move(playerPos);
-		}
 
 	}
 		
@@ -197,18 +197,20 @@ void Game::Render()
 {
 	window.View(view);
 	window.BeginDraw();
-	if (window.checkIfBegin())
-	{
+	if (window.checkIfBegin()) {
 		window.Draw(map);
-		for (size_t i = 0; i < zombies.size(); ++i)
+		for (size_t i = 0; i < zombies.size(); ++i) {
 			window.Draw(zombies[i].zombieSprite);
+			if (zombies[i].bloodSplattered)
+				window.Draw(zombies[i].blood);
+		}
 		window.Draw(*player.getLegsSprite());
 		window.Draw(*player.getPlayerSprite());
 		window.Draw(*player.getGunSprite());
-		if (player.getFireStatus())
-			window.Draw(*player.getGunshotSprite());
-		for (size_t i = 0; i < bullets.size(); ++i)
-			window.Draw(bullets[i].projectile);
+		for (size_t i = 0; i < bullets.size(); ++i) {
+			if (bullets[i].projectile.getPosition().x < (checkViewCenter().x + 128) || bullets[i].projectile.getPosition().x > (checkViewCenter().x - 128) || bullets[i].projectile.getPosition().y < (checkViewCenter().y + 72) || bullets[i].projectile.getPosition().y > (checkViewCenter().y - 72))
+				window.Draw(bullets[i].projectile);
+		}
 		window.Draw(cursor);
 	}
 	//for drawing in main menu

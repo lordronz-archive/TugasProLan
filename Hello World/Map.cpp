@@ -18,8 +18,8 @@ void Map::load(const int *tiles)
             int tileNumber = tiles[i + j * 40];
 
             // find its position in the tileset texture
-            int tu = std::fmod(tileNumber, (m_tileset.getSize().x / tileSize.x));
-            int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
+            int tu = static_cast<int>(std::fmod(tileNumber, (m_tileset.getSize().x / tileSize.x)));
+            int tv = static_cast<int>(tileNumber / (m_tileset.getSize().x / (tileSize.x)));
 
             // get a pointer to the current tile's quad
             sf::Vertex* quad = &m_vertices[(i + j * 40) * 4];

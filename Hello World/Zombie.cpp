@@ -1,6 +1,6 @@
 #include "Zombie.h"
 
-Zombie::Zombie() :speed(0.5), xPos(0), yPos(0), tiles{0}, healthPoints(100)
+Zombie::Zombie() :speed(0.5), xPos(0), yPos(0), tiles{0}, healthPoints(100), bloodCount(0), bloodSplattered(false)
 {
 	if (!zombieTexture.loadFromFile("Textures/zombie.png"))
 		std::cout << "ERROR LOADING PLAYER TEXTURE" << std::endl;
@@ -13,6 +13,18 @@ Zombie::Zombie() :speed(0.5), xPos(0), yPos(0), tiles{0}, healthPoints(100)
 	zombieSprite.setTexture(zombieTexture);
 	zombieSprite.setTextureRect(sf::IntRect(textSize.x * 0, textSize.y * 1, textSize.x, textSize.y));
 	zombieSprite.setPosition(sf::Vector2f(640, 300));
+
+
+	if (!bloodText.loadFromFile("Textures/blood.png"))
+		std::cout << "ERROR LOADING BLOOD TEXTURE" << std::endl;
+
+	bloodTextSize = bloodText.getSize();
+	bloodTextSize.x /= 6;
+	blood.setOrigin(sf::Vector2f(bloodTextSize.x / 2.0f, bloodTextSize.y / 2.0f));
+	blood.setTexture(bloodText);
+	blood.setTextureRect(sf::IntRect(bloodTextSize.x * 0, bloodTextSize.y * 0, bloodTextSize.x, bloodTextSize.y));
+	blood.setPosition(zombieSprite.getPosition());
+	blood.setScale(0.5f, 0.5f);
 
 	srand(static_cast<unsigned int>(time(NULL)));
 
@@ -170,6 +182,23 @@ void Zombie::Move(sf::Vector2f playerPosition)
 		sf::Vector2f currentSpeed = normalizedDir * speed;
 
 		zombieSprite.move(currentSpeed);
+	}
+}
+
+void Zombie::update(bool shot)
+{
+	bloodSplattered = shotTimer.getElapsedTime().asSeconds() > 1.0f && !shot ? false : true;
+	
+	blood.setPosition(zombieSprite.getPosition());
+	if (bloodTimer.getElapsedTime().asSeconds() > .2f) {
+		++bloodCount;
+		bloodTimer.restart();
+	}
+	bloodCount = bloodCount > 5 ? 0 : bloodCount;
+	blood.setTextureRect(sf::IntRect(bloodTextSize.x * bloodCount, bloodTextSize.y * 0, bloodTextSize.x, bloodTextSize.y));
+	if (shot) {
+		bloodSplattered = true;
+		shotTimer.restart();
 	}
 }
 
