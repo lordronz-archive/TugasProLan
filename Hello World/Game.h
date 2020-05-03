@@ -10,7 +10,7 @@
 #include "Wall.h"
 #include "Zombie.h"
 #include "GUI.h"
-#include "GameOver.h"
+#include "GameOverHelp.h"
 
 #include <array>
 
@@ -22,7 +22,7 @@ private:
 	Bullet b1;
 	Zombie zombie;
 	GUI GUI;
-	GameOver gOver;
+	GameOverHelp gOver;
 	std::vector<Zombie> zombies;
 	std::vector<Bullet> bullets;
 	Map map;

@@ -1,7 +1,7 @@
 #include "Game.h"
 
 Game::Game() :
-	view(sf::View(sf::FloatRect(640, 360, 256, 144))), walls {wall}, zombieShot(false), gameOver(false), score(0)
+	view(sf::View(sf::FloatRect(640, 360, 256, 144))), walls{ wall }, zombieShot(false), gameOver(false), score(0)
 {
 	if (!cursorText.loadFromFile("Textures/pointer.png"))
 		std::cout << "ERROR LOADING CURSOR TEXTURE" << std::endl;
@@ -20,7 +20,7 @@ Game::Game() :
 	ricochetSfx.setBuffer(ricochetBuffer);
 	ricochetSfx.setVolume(50.f);
 
-								//size							position
+	//size							position
 	walls[0].initWall(sf::Vector2f(64.0f, 96.0f), sf::Vector2f(416.0f, 656.0f));
 	walls[1].initWall(sf::Vector2f(64.0f, 64.0f), sf::Vector2f(32.0f, 672.0f));
 	//dinding sebelah kiri 96 pixel dari dinding kanan
@@ -54,30 +54,30 @@ Game::Game() :
 
 	const int tiles[] =
 	{	//1 tile = 32 * 32 pixel
-	//	1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40
-/*1*/	21, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 66, 67, 66, 67, 66, 67, 66, 67, 20, 16, 8 , 10, 9 , 10, 8 , 16, 61, 62,
-/*2*/	21, 8 , 8 , 8 , 9 , 9 , 10, 25, 25, 26, 26, 27, 27, 27, 27, 27, 25, 25, 35, 36, 36, 36, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 66, 67,
-/*3*/	21, 16, 8 , 8 , 10, 25, 26, 27, 25, 14, 13, 4 , 4 , 6 , 3 , 7 , 8 , 9 , 8 , 9 , 8 , 9 , 4 , 7 , 1 , 51, 9 , 6 , 5 , 1 , 1 , 6 , 1 , 1 , 3 , 1 , 6 , 2 , 1 , 78,
-/*4*/	22, 1 , 4 , 4 , 2 , 75, 3 , 24, 9 , 12, 4 , 6 , 7 , 27, 27, 25, 8 , 9 , 8 , 9 , 9 , 8 , 6 , 1 , 1 , 9 , 10, 3 , 1 , 1 , 1 , 1 , 7 , 1 , 5 , 1 , 1 , 1 , 1 , 77,
-/*5*/	2 , 1 , 1 , 2 , 3 , 3 , 3 , 10, 10, 9 , 7 , 1 , 2 , 16, 9 , 9 , 8 , 8 , 9 , 9 , 10, 10, 4 , 6 , 7 , 16, 8 , 3 , 2 , 1 , 5 , 1 , 4 , 3 , 7 , 4 , 7 , 2 , 5 , 78,
-/*6*/	21, 9 , 16, 10, 10, 16, 10, 9 , 10, 10, 1 , 5 , 4 , 7 , 4 , 10, 10, 10, 10, 10, 10, 10, 16, 16, 16, 52, 16, 8 , 15, 15, 9 , 24, 53, 53, 16, 16, 9 , 10, 3 , 78,
-/*7*/	21, 26, 25, 10, 9 , 8 , 24, 24, 8 , 8 , 2 , 3 , 6 , 2 , 1 , 9 , 10, 10, 10, 10, 10, 10, 16, 16, 8 , 16, 51, 8 , 9 , 9 , 8 , 24, 52, 52, 8 , 10, 10, 14, 4 , 78,
-/*8*/	21, 25, 25, 10, 3 , 1 , 2 , 5 , 8 , 8 , 10, 8 , 1 , 3 , 1 , 9 , 10, 10, 10, 15, 8 , 8 , 1 , 6 , 1 , 7 , 3 , 4 , 3 , 10, 9 , 1 , 61, 62, 8 , 16, 5 , 3 , 1 , 76,
-/*9*/	76, 27, 26, 16, 7 , 1 , 7 , 6 , 16, 8 , 9 , 8 , 5 , 1 , 5 , 10, 9 , 9 , 10, 51, 52, 9 , 1 , 2 , 3 , 5 , 3 , 1 , 2 , 10, 8 , 1 , 66, 67, 8 , 54, 2 , 1 , 6 , 75,
-/*10*/	74, 25, 27, 49, 3 , 1 , 1 , 1 , 16, 8 , 10, 8 , 2 , 7 , 6 , 16, 8 , 9 , 10, 24, 24, 8 , 8 , 8 , 4 , 4 , 1 , 7 , 1 , 16, 16, 1 , 1 , 1 , 16, 52, 1 , 1 , 1 , 79,
-/*11*/	75, 31, 27, 49, 4 , 5 , 5 , 1 , 16, 8 , 10, 8 , 3 , 5 , 6 , 16, 8 , 9 , 10, 28, 29, 24, 16, 16, 16, 16, 8 , 1 , 74, 10, 10, 1 , 1 , 1 , 16, 16, 4 , 5 , 7 , 21,
-/*12*/	21, 31, 48, 9 , 1 , 2 , 1 , 4 , 16, 8 , 10, 8 , 1 , 1 , 2 , 9 , 8 , 9 , 10, 30, 31, 8 , 16, 16, 16, 16, 8 , 7 , 3 , 24, 54, 1 , 1 , 1 , 10, 8 , 1 , 4 , 1 , 21,
-/*13*/	21, 24, 49, 10, 4 , 4 , 1 , 5 , 16, 8 , 10, 8 , 4 , 1 , 1 , 8 , 9 , 8 , 10, 20, 11, 16, 5 , 1 , 5 , 16, 16, 3 , 1 , 9 , 10, 1 , 1 , 1 , 16, 10, 3 , 5 , 1 , 21,
-/*14*/	11, 24, 49, 10, 5 , 7 , 4 , 5 , 16, 8 , 10, 8 , 2 , 1 , 2 , 10, 8 , 25, 10, 8 , 53, 52, 4 , 1 , 3 , 16, 16, 1 , 5 , 9 , 10, 1 , 1 , 1 , 10, 9 , 3 , 2 , 1 , 21,
-/*15*/	9 , 24, 49, 10, 4 , 7 , 3 , 2 , 16, 8 , 10, 8 , 3 , 4 , 1 , 8 , 8 , 25, 10, 16, 16, 16, 4 , 5 , 1 , 16, 16, 2 , 6 , 10, 10, 1 , 1 , 1 , 10, 9 , 1 , 1 , 4 , 21,
-/*16*/	8 , 24, 49, 10, 7 , 6 , 1 , 3 , 25, 8 , 10, 8 , 6 , 5 , 4 , 8 , 8 , 24, 10, 16, 16, 16, 1 , 1 , 1 , 16, 16, 1 , 6 , 9 , 10, 76, 1 , 1 , 8 , 10, 7 , 3 , 1 , 21,
-/*17*/	8 , 24, 49, 10, 6 , 1 , 6 , 1 , 26, 8 , 10, 8 , 10, 10, 4 , 9 , 24, 24, 10, 8 , 16, 16, 4 , 6 , 4 , 16, 16, 4 , 20, 15, 15, 1 , 1 , 1 , 9 , 16, 5 , 1 , 7 , 21,
-/*18*/	16, 24, 49, 10, 6 , 3 , 3 , 7 , 9 , 9 , 8 , 9 , 10, 10, 1 , 24, 14, 13, 10, 27, 16, 16, 1 , 7 , 1 , 8 , 8 , 51, 57, 24, 25, 1 , 1 , 1 , 8 , 16, 7 , 7 , 1 , 16,
-/*19*/	62, 54, 49, 10, 6 , 5 , 2 , 6 , 8 , 8 , 9 , 8 , 9 , 9 , 2 , 24, 12, 11, 24, 10, 25, 16, 1 , 1 , 1 , 52, 51, 56, 52, 25, 24, 1 , 1 , 1 , 9 , 8 , 1 , 1 , 1 , 16,
-/*20*/	67, 54, 49, 12, 7 , 1 , 2 , 7 , 8 , 9 , 8 , 8 , 22, 22, 7 , 24, 25, 25, 24, 10, 25, 16, 7 , 5 , 3 , 2 , 5 , 6 , 2 , 3 , 2 , 1 , 1 , 1 , 9 , 8 , 2 , 1 , 5 , 16,
-/*21*/	61, 62, 49, 12, 5 , 1 , 4 , 4 , 9 , 9 , 9 , 9 , 23, 23, 1 , 24, 24, 24, 25, 10, 25, 16, 3 , 3 , 1 , 1 , 2 , 4 , 1 , 7 , 1 , 1 , 1 , 1 , 10, 16, 1 , 3 , 4 , 16,
-/*22*/	66, 67, 49, 12, 3 , 4 , 2 , 1 , 8 , 8 , 8 , 9 , 22, 23, 5 , 25, 25, 26, 27, 10, 26, 26, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
-/*23*/	47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47,
+			//	1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40
+		/*1*/	21, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 66, 67, 66, 67, 66, 67, 66, 67, 20, 16, 8 , 10, 9 , 10, 8 , 16, 61, 62,
+		/*2*/	21, 8 , 8 , 8 , 9 , 9 , 10, 25, 25, 26, 26, 27, 27, 27, 27, 27, 25, 25, 35, 36, 36, 36, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 66, 67,
+		/*3*/	21, 16, 8 , 8 , 10, 25, 26, 27, 25, 14, 13, 4 , 4 , 6 , 3 , 7 , 8 , 9 , 8 , 9 , 8 , 9 , 4 , 7 , 1 , 51, 9 , 6 , 5 , 1 , 1 , 6 , 1 , 1 , 3 , 1 , 6 , 2 , 1 , 78,
+		/*4*/	22, 1 , 4 , 4 , 2 , 75, 3 , 24, 9 , 12, 4 , 6 , 7 , 27, 27, 25, 8 , 9 , 8 , 9 , 9 , 8 , 6 , 1 , 1 , 9 , 10, 3 , 1 , 1 , 1 , 1 , 7 , 1 , 5 , 1 , 1 , 1 , 1 , 77,
+		/*5*/	2 , 1 , 1 , 2 , 3 , 3 , 3 , 10, 10, 9 , 7 , 1 , 2 , 16, 9 , 9 , 8 , 8 , 9 , 9 , 10, 10, 4 , 6 , 7 , 16, 8 , 3 , 2 , 1 , 5 , 1 , 4 , 3 , 7 , 4 , 7 , 2 , 5 , 78,
+		/*6*/	21, 9 , 16, 10, 10, 16, 10, 9 , 10, 10, 1 , 5 , 4 , 7 , 4 , 10, 10, 10, 10, 10, 10, 10, 16, 16, 16, 52, 16, 8 , 15, 15, 9 , 24, 53, 53, 16, 16, 9 , 10, 3 , 78,
+		/*7*/	21, 26, 25, 10, 9 , 8 , 24, 24, 8 , 8 , 2 , 3 , 6 , 2 , 1 , 9 , 10, 10, 10, 10, 10, 10, 16, 16, 8 , 16, 51, 8 , 9 , 9 , 8 , 24, 52, 52, 8 , 10, 10, 14, 4 , 78,
+		/*8*/	21, 25, 25, 10, 3 , 1 , 2 , 5 , 8 , 8 , 10, 8 , 1 , 3 , 1 , 9 , 10, 10, 10, 15, 8 , 8 , 1 , 6 , 1 , 7 , 3 , 4 , 3 , 10, 9 , 1 , 61, 62, 8 , 16, 5 , 3 , 1 , 76,
+		/*9*/	76, 27, 26, 16, 7 , 1 , 7 , 6 , 16, 8 , 9 , 8 , 5 , 1 , 5 , 10, 9 , 9 , 10, 51, 52, 9 , 1 , 2 , 3 , 5 , 3 , 1 , 2 , 10, 8 , 1 , 66, 67, 8 , 54, 2 , 1 , 6 , 75,
+		/*10*/	74, 25, 27, 49, 3 , 1 , 1 , 1 , 16, 8 , 10, 8 , 2 , 7 , 6 , 16, 8 , 9 , 10, 24, 24, 8 , 8 , 8 , 4 , 4 , 1 , 7 , 1 , 16, 16, 1 , 1 , 1 , 16, 52, 1 , 1 , 1 , 79,
+		/*11*/	75, 31, 27, 49, 4 , 5 , 5 , 1 , 16, 8 , 10, 8 , 3 , 5 , 6 , 16, 8 , 9 , 10, 28, 29, 24, 16, 16, 16, 16, 8 , 1 , 74, 10, 10, 1 , 1 , 1 , 16, 16, 4 , 5 , 7 , 21,
+		/*12*/	21, 31, 48, 9 , 1 , 2 , 1 , 4 , 16, 8 , 10, 8 , 1 , 1 , 2 , 9 , 8 , 9 , 10, 30, 31, 8 , 16, 16, 16, 16, 8 , 7 , 3 , 24, 54, 1 , 1 , 1 , 10, 8 , 1 , 4 , 1 , 21,
+		/*13*/	21, 24, 49, 10, 4 , 4 , 1 , 5 , 16, 8 , 10, 8 , 4 , 1 , 1 , 8 , 9 , 8 , 10, 20, 11, 16, 5 , 1 , 5 , 16, 16, 3 , 1 , 9 , 10, 1 , 1 , 1 , 16, 10, 3 , 5 , 1 , 21,
+		/*14*/	11, 24, 49, 10, 5 , 7 , 4 , 5 , 16, 8 , 10, 8 , 2 , 1 , 2 , 10, 8 , 25, 10, 8 , 53, 52, 4 , 1 , 3 , 16, 16, 1 , 5 , 9 , 10, 1 , 1 , 1 , 10, 9 , 3 , 2 , 1 , 21,
+		/*15*/	9 , 24, 49, 10, 4 , 7 , 3 , 2 , 16, 8 , 10, 8 , 3 , 4 , 1 , 8 , 8 , 25, 10, 16, 16, 16, 4 , 5 , 1 , 16, 16, 2 , 6 , 10, 10, 1 , 1 , 1 , 10, 9 , 1 , 1 , 4 , 21,
+		/*16*/	8 , 24, 49, 10, 7 , 6 , 1 , 3 , 25, 8 , 10, 8 , 6 , 5 , 4 , 8 , 8 , 24, 10, 16, 16, 16, 1 , 1 , 1 , 16, 16, 1 , 6 , 9 , 10, 76, 1 , 1 , 8 , 10, 7 , 3 , 1 , 21,
+		/*17*/	8 , 24, 49, 10, 6 , 1 , 6 , 1 , 26, 8 , 10, 8 , 10, 10, 4 , 9 , 24, 24, 10, 8 , 16, 16, 4 , 6 , 4 , 16, 16, 4 , 20, 15, 15, 1 , 1 , 1 , 9 , 16, 5 , 1 , 7 , 21,
+		/*18*/	16, 24, 49, 10, 6 , 3 , 3 , 7 , 9 , 9 , 8 , 9 , 10, 10, 1 , 24, 14, 13, 10, 27, 16, 16, 1 , 7 , 1 , 8 , 8 , 51, 57, 24, 25, 1 , 1 , 1 , 8 , 16, 7 , 7 , 1 , 16,
+		/*19*/	62, 54, 49, 10, 6 , 5 , 2 , 6 , 8 , 8 , 9 , 8 , 9 , 9 , 2 , 24, 12, 11, 24, 10, 25, 16, 1 , 1 , 1 , 52, 51, 56, 52, 25, 24, 1 , 1 , 1 , 9 , 8 , 1 , 1 , 1 , 16,
+		/*20*/	67, 54, 49, 12, 7 , 1 , 2 , 7 , 8 , 9 , 8 , 8 , 22, 22, 7 , 24, 25, 25, 24, 10, 25, 16, 7 , 5 , 3 , 2 , 5 , 6 , 2 , 3 , 2 , 1 , 1 , 1 , 9 , 8 , 2 , 1 , 5 , 16,
+		/*21*/	61, 62, 49, 12, 5 , 1 , 4 , 4 , 9 , 9 , 9 , 9 , 23, 23, 1 , 24, 24, 24, 25, 10, 25, 16, 3 , 3 , 1 , 1 , 2 , 4 , 1 , 7 , 1 , 1 , 1 , 1 , 10, 16, 1 , 3 , 4 , 16,
+		/*22*/	66, 67, 49, 12, 3 , 4 , 2 , 1 , 8 , 8 , 8 , 9 , 22, 23, 5 , 25, 25, 26, 27, 10, 26, 26, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
+		/*23*/	47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47,
 
 	};
 	map.load(tiles);
@@ -115,8 +115,8 @@ void Game::updatePlayer() {
 	sf::RenderWindow* win = window.getWindow();
 	sf::Vector2f playerPos = player.getCharCoord();
 	player.updatePlayer(win);
-	
-	GUI.setHealth(player.healthPoints, checkViewCenter());
+
+	GUI.setHealthAndScore(player.healthPoints, score, checkViewCenter());
 
 	//fire
 	if (player.fire && !player.isFiring) {
@@ -166,7 +166,7 @@ void Game::updateZombie(sf::Vector2f playerPos)
 			zombies[i].Move(playerPos);
 		else {
 			if (zombies[i].attack())
-				player.healthPoints -= 20;
+				player.healthPoints = player.isMidNight ? player.healthPoints -= 35 : player.healthPoints -= 20;
 		}
 		for (size_t j = 0; j < bullets.size(); ++j) {
 			if (bullets[j].projectile.getGlobalBounds().intersects(zombies[i].zombieSprite.getGlobalBounds())) {
@@ -175,7 +175,7 @@ void Game::updateZombie(sf::Vector2f playerPos)
 				zombieShot = true;
 			}
 		}
-		zombies[i].update(zombieShot, playerPos);
+		zombies[i].update(zombieShot, playerPos, player.isMidNight);
 		if (zombies[i].reallyDead) {
 			zombies.erase(zombies.begin() + i);
 			score += 10;
@@ -185,10 +185,10 @@ void Game::updateZombie(sf::Vector2f playerPos)
 }
 
 void Game::Update() {
-	
+
 	window.Update(); // Update window events.
 
-	if (window.checkIfBegin() && !gameOver)
+	if (window.checkIfBegin() && !gameOver && !window.help)
 	{
 		cursor.setPosition(player.getMousePos());
 
@@ -201,16 +201,25 @@ void Game::Update() {
 		view.setCenter(checkViewCenter());
 
 	}
-		
-	else if (!window.checkIfBegin() || gameOver)
+
+	else if (!window.checkIfBegin() || gameOver || window.help)
 	{
+		std::cout << window.help << std::endl;
+		if (window.help)
+			gOver.help();
 		if (gOver.select(gameOver, window.getWindow()) && gameOver) {
 			gameOver = false;
 			player.healthPoints = 100;
 			window.togglePlay();
 			gOver.toggler = false;
 			player.resetLocation();
+			player.resetTime();
 			zombies.clear();
+			score = 0;
+		}
+		else if (gOver.helpSelect(window.help, window.getWindow()) && window.help) {
+			window.help = false;
+			gOver.helpToggler = false;
 		}
 		view.setSize(sf::Vector2f(1280, 720));
 		view.setCenter(sf::Vector2f(640, 360));
@@ -226,25 +235,31 @@ void Game::Render()
 		window.Draw(map);
 		for (size_t i = 0; i < zombies.size(); ++i) {
 			//if (zombies[i].zombieSprite.getPosition().x < (checkViewCenter().x + 150) && zombies[i].zombieSprite.getPosition().x >(checkViewCenter().x - 150) && zombies[i].zombieSprite.getPosition().y < (checkViewCenter().y + 90) && zombies[i].zombieSprite.getPosition().y >(checkViewCenter().y - 90)) {
-				window.Draw(zombies[i].zombieSprite);
-				if (zombies[i].bloodSplattered)
-					window.Draw(zombies[i].blood);
+			window.Draw(zombies[i].zombieSprite);
+			if (zombies[i].bloodSplattered)
+				window.Draw(zombies[i].blood);
 			//}
 		}
 		window.Draw(*player.getLegsSprite());
 		window.Draw(*player.getPlayerSprite());
 		window.Draw(*player.getGunSprite());
-		window.Draw(player.nightBox);
 		for (size_t i = 0; i < bullets.size(); ++i) {
-			if (bullets[i].projectile.getPosition().x < (checkViewCenter().x + 128) && bullets[i].projectile.getPosition().x > (checkViewCenter().x - 128) && bullets[i].projectile.getPosition().y < (checkViewCenter().y + 72) && bullets[i].projectile.getPosition().y > (checkViewCenter().y - 72))
+			if (bullets[i].projectile.getPosition().x < (checkViewCenter().x + 128) && bullets[i].projectile.getPosition().x >(checkViewCenter().x - 128) && bullets[i].projectile.getPosition().y < (checkViewCenter().y + 72) && bullets[i].projectile.getPosition().y >(checkViewCenter().y - 72))
 				window.Draw(bullets[i].projectile);
 		}
+		window.Draw(player.nightBox);
 		window.Draw(cursor);
 		window.Draw(*GUI.getHealthGUI());
+		window.Draw(*GUI.getScoreGUI());
 	}
 	else if (gameOver)
 	{
 		for (size_t i = 0; i < 3; ++i)
+			window.Draw(gOver.text[i]);
+	}
+	else if (!window.checkIfBegin() && window.help)
+	{
+		for (size_t i = 0; i < 2; ++i)
 			window.Draw(gOver.text[i]);
 	}
 	//for drawing in main menu

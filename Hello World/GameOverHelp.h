@@ -1,19 +1,22 @@
 #pragma once
-#ifndef GAMEOVER_H
-#define GAMEOVER_H
+#ifndef GAMEOVERHELP_H
+#define GAMEOVERHELP_H
 #include <SFML/Graphics.hpp>
 #include <sstream>
 #include <iostream>
 
-class GameOver
+class GameOverHelp
 {
 public:
-	GameOver();
+	GameOverHelp();
 	void setScore();
 	sf::Text text[3];
+	void help();
+	bool helpSelect(bool gameOver, sf::RenderWindow* window);
 	bool select(bool gameOver, sf::RenderWindow* window);
 	void setScore(unsigned int score);
 	bool toggler;
+	bool helpToggler;
 
 private:
 	sf::Font font;

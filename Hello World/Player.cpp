@@ -38,8 +38,8 @@ Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(10
 	legs.setTextureRect(sf::IntRect(textSize.x * 0, textSize.y * 0, legsTSize.x, legsTSize.y));
 	legs.setPosition(sf::Vector2f(640, 360));
 
-	nightBox.setSize(sf::Vector2f(1000.f, 600.f));
-	nightBox.setOrigin(sf::Vector2f(1000.f, 600.f) / 2.0f);
+	nightBox.setSize(sf::Vector2f(600.f, 300.f));
+	nightBox.setOrigin(sf::Vector2f(600.f, 300.f) / 2.0f);
 	nightBox.setPosition(sf::Vector2f(640.f, 360.f));
 	nightBox.setFillColor(sf::Color(30, 30, 30, 0));
 
@@ -75,6 +75,7 @@ void Player::updateTime()
 		std::cout << nightCount << std::endl;
 		nightTimer.restart();
 	}
+	isMidNight = nightCount > 150 ? true : false;
 }
 
 bool Player::Move(float moveX, float moveY)

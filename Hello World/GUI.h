@@ -11,13 +11,14 @@ class GUI
 {
 private:
 	sf::Text health;
+	sf::Text score;
 	sf::Font font;
 
 public:
 	GUI();
-	int score;
-	void setHealth(int health, sf::Vector2f pos);
+	void setHealthAndScore(int health, int score, sf::Vector2f pos);
 	sf::Text* getHealthGUI();
+	sf::Text* getScoreGUI();
 };
 
 #endif // !GUI_H

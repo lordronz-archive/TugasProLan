@@ -15,7 +15,7 @@ public:
     sf::Sprite zombieSprite;
     sf::Sprite blood;
     void Move(sf::Vector2f playerPosition);
-    void update(bool shot, sf::Vector2f playerPosition);
+    void update(bool shot, sf::Vector2f playerPosition, bool midNight);
     void setLocation();
     bool attack();
     sf::Vector2f zombiePosition;

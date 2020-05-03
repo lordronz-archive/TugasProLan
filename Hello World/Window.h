@@ -33,9 +33,10 @@ public:
 	sf::Vector2u GetWindowSize();
 	void ToggleFullscreen();
 	void Draw(sf::Drawable& l_drawable);
-	void View(sf::View &view);
+	void View(sf::View& view);
 	bool checkIfBegin();
 	void togglePlay();
+	bool help;
 };
 
 #endif

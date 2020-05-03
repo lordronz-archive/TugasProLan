@@ -23,6 +23,7 @@ public:
 	int getPressedItem();
 	bool checkMenuPlay();
 	bool checkExit();
+	bool checkHelp();
 	sf::Texture* drawMenuBg();
 	sf::VertexArray* drawMenuBar();
 
@@ -36,6 +37,7 @@ private:
 	sf::VertexArray menuBar;
 	bool play;
 	bool exit;
+	bool help;
 	bool mouseClick;
 };
 

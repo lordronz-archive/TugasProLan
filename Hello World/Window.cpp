@@ -1,6 +1,6 @@
 #include "Window.h"
 
-Window::Window():m_isDone(false), play(false)
+Window::Window() :m_isDone(false), play(false), help(false)
 {
 	Setup("Hello World", sf::Vector2u(1280, 720));
 	sf::Image icon;
@@ -8,7 +8,7 @@ Window::Window():m_isDone(false), play(false)
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 
-Window::~Window(){}
+Window::~Window() {}
 
 void Window::BeginDraw()
 {
@@ -19,7 +19,7 @@ void Window::EndDraw(bool gameOver)
 {
 	window.display();
 	play ? window.setMouseCursorVisible(false) : window.setMouseCursorVisible(true);
-	if (gameOver)
+	if (gameOver || help)
 		window.setMouseCursorVisible(true);
 }
 
@@ -37,22 +37,22 @@ void Window::Update()
 			switch (event.key.code)
 			{
 			case sf::Keyboard::Up:
-				if (!play)
+				if (!play && !help)
 					menu.moveUp();
 				break;
 
 			case sf::Keyboard::Down:
-				if (!play)
+				if (!play && !help)
 					menu.moveDown();
 				break;
 
 			case sf::Keyboard::W:
-				if (!play)
+				if (!play && !help)
 					menu.moveUp();
 				break;
 
 			case sf::Keyboard::S:
-				if (!play)
+				if (!play && !help)
 					menu.moveDown();
 				break;
 
@@ -60,18 +60,23 @@ void Window::Update()
 				switch (menu.getPressedItem())
 				{
 				case 0:
-					if (!play)
+					if (!play && !help)
 						play = true;
 					break;
+				case 1:
+					if (!play && !help)
+						help = true;
+					break;
 				case 2:
-					if (!play)
+					if (!play &&!help)
 						m_isDone = true;
 					break;
 				}
 				break;
 
 			case sf::Keyboard::Escape:
-				play = !play;
+				if (!help)
+					play = !play;
 				break;
 
 			}
@@ -107,7 +112,7 @@ void Window::ToggleFullscreen()
 {
 	m_isFullscreen = !m_isFullscreen;
 	Destroy();
-	Create();	
+	Create();
 }
 
 sf::RenderWindow* Window::getWindow()
@@ -117,7 +122,7 @@ sf::RenderWindow* Window::getWindow()
 
 void Window::Draw(sf::Drawable& l_drawable)
 {
-	if (!play)
+	if (!play && !help)
 	{
 		window.draw(sf::Sprite(*menu.drawMenuBg()));
 		window.draw(*menu.drawMenuBar());

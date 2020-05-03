@@ -1,7 +1,7 @@
 #include "Menu.h"
 
 Menu::Menu()
-	:selectedItemIndex(0), exit(false), play(false), mouseClick(false), menuBar(sf::Quads, 4)
+	:selectedItemIndex(0), exit(false), play(false), mouseClick(false), help(false), menuBar(sf::Quads, 4)
 {
 
 	if (!font.loadFromFile("DoubleFeature.ttf"))
@@ -16,8 +16,8 @@ Menu::Menu()
 
 	menu[1].setFont(font);
 	menu[1].setFillColor(sf::Color::White);
-	menu[1].setString("OPTION");
-	menu[1].setOrigin(sf::Vector2f(45, 0));
+	menu[1].setString("HELP");
+	menu[1].setOrigin(sf::Vector2f(30, 0));
 	menu[1].setPosition(sf::Vector2f(1280 / 2.0f, 720 / (MAX + 1) * 2.5f));
 	menu[1].setOutlineThickness(3.f);
 
@@ -36,7 +36,7 @@ Menu::Menu()
 
 	menuBar[2].position = sf::Vector2f(1280, menu[0].getPosition().y + 1.5f * menu[0].getCharacterSize());
 	menuBar[2].color = sf::Color(43, 126, 227, 128);
-	
+
 	menuBar[3].position = sf::Vector2f(0, menu[0].getPosition().y + 1.5f * menu[0].getCharacterSize());
 	menuBar[3].color = sf::Color(43, 126, 227, 128);
 
@@ -49,7 +49,7 @@ Menu::Menu()
 		std::cout << "ERROR LOADING MENU BG IMAGE" << std::endl;
 }
 
-Menu::~Menu(){}
+Menu::~Menu() {}
 
 sf::VertexArray* Menu::drawMenuBar()
 {
@@ -79,6 +79,11 @@ bool Menu::checkMenuPlay()
 bool Menu::checkExit()
 {
 	return exit;
+}
+
+bool Menu::checkHelp()
+{
+	return help;
 }
 
 void Menu::moveUp()
@@ -149,11 +154,9 @@ void Menu::moveDown()
 	}
 }
 
-void Menu::mouseSelect(sf::RenderWindow *window, bool play)
+void Menu::mouseSelect(sf::RenderWindow* window, bool play)
 {
 	this->play = play;
-
-	sf::Vector2f mousePixelPos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 
 	if (play) {
 		selectedItemIndex = 0;
@@ -163,6 +166,7 @@ void Menu::mouseSelect(sf::RenderWindow *window, bool play)
 	}
 
 	if (!play) {
+		sf::Vector2f mousePixelPos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 		if (menu[0].getGlobalBounds().contains(mousePixelPos)) {
 			if (selectedItemIndex != 0)
 				menuSfx.play();
@@ -200,6 +204,12 @@ void Menu::mouseSelect(sf::RenderWindow *window, bool play)
 			menu[selectedItemIndex].setFillColor(sf::Color::Red);
 			menu[0].setFillColor(sf::Color::White);
 			menu[2].setFillColor(sf::Color::White);
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				mouseClick = true;
+			else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mouseClick) {
+				help = true;
+				mouseClick = false;
+			}
 		}
 		else if (menu[2].getGlobalBounds().contains(mousePixelPos)) {
 			if (selectedItemIndex != 2)

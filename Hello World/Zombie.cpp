@@ -196,7 +196,7 @@ void Zombie::Move(sf::Vector2f playerPosition)
 	}
 }
 
-void Zombie::update(bool shot, sf::Vector2f playerPosition)
+void Zombie::update(bool shot, sf::Vector2f playerPosition, bool midNight)
 {
 	float distance = sqrt(pow((playerPosition.x - zombieSprite.getPosition().x), 2) + pow((playerPosition.y - zombieSprite.getPosition().y), 2));
 
@@ -210,7 +210,7 @@ void Zombie::update(bool shot, sf::Vector2f playerPosition)
 	bloodCount = bloodCount > 5 ? 0 : bloodCount;
 	blood.setTextureRect(sf::IntRect(bloodTextSize.x * bloodCount, bloodTextSize.y * 0, bloodTextSize.x, bloodTextSize.y));
 	if (shot) {
-		healthPoints -= 50;
+		healthPoints = midNight ? healthPoints -= 35 : healthPoints -=50;
 		bloodSplattered = true;
 		shotTimer.restart();
 		zombieHurt.setVolume(std::min(std::max((100.f - distance / 5.f), 1.f), 100.f));
