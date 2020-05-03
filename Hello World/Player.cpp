@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(100), isDead(false), stepCount(0)
+Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(100), isDead(false), stepCount(0), nightCount(0), isIncreasing(true), isMidNight(false)
 {
 	// Setting up class members.
 	if (!playerTexture.loadFromFile("Textures/ct1.bmp"))
@@ -38,6 +38,11 @@ Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(10
 	legs.setTextureRect(sf::IntRect(textSize.x * 0, textSize.y * 0, legsTSize.x, legsTSize.y));
 	legs.setPosition(sf::Vector2f(640, 360));
 
+	nightBox.setSize(sf::Vector2f(1000.f, 600.f));
+	nightBox.setOrigin(sf::Vector2f(1000.f, 600.f) / 2.0f);
+	nightBox.setPosition(sf::Vector2f(640.f, 360.f));
+	nightBox.setFillColor(sf::Color(30, 30, 30, 0));
+
 	if (!weaponSfxBuffer.loadFromFile("Sound/galil.wav"))
 		std::cout << "ERROR LOADING WEAPON SOUND" << std::endl;
 
@@ -53,6 +58,23 @@ Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(10
 sf::Vector2f Player::getPlayerCenter()
 {
 	return playerCenter;
+}
+
+void Player::updateTime()
+{
+	float dt = nightTimer.getElapsedTime().asSeconds();
+	isIncreasing = nightCount == 0 ? true : isIncreasing;
+	isIncreasing = nightCount == 180 ? false : isIncreasing;
+	if (isIncreasing && dt >= 1.0f) {
+		++nightCount;
+		std::cout << nightCount << std::endl;
+		nightTimer.restart();
+	}
+	else if (!isIncreasing && dt >= 1.0f) {
+		--nightCount;
+		std::cout << nightCount << std::endl;
+		nightTimer.restart();
+	}
 }
 
 bool Player::Move(float moveX, float moveY)
@@ -146,6 +168,9 @@ void Player::updatePlayer(sf::RenderWindow* window)
 	gun.setRotation(rotation + 90.f);
 	legs.setRotation(rotation + 90.f);
 
+	updateTime();
+	nightBox.setFillColor(sf::Color(30, 30, 30, nightCount));
+
 	if (dt1 > 2)
 	{
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -160,6 +185,7 @@ void Player::updatePlayer(sf::RenderWindow* window)
 
 	gun.setPosition(player.getPosition());
 	legs.setPosition(player.getPosition());
+	nightBox.setPosition(player.getPosition());
 }
 
 Collider Player::GetCollider()
@@ -173,6 +199,13 @@ Collider Player::GetCollider()
 void Player::resetLocation()
 {
 	player.setPosition(sf::Vector2f(640.f, 360.f));
+}
+
+void Player::resetTime()
+{
+	nightCount = 0;
+	nightTimer.restart();
+	isMidNight = false;
 }
 
 sf::Vector2f Player::getMousePos()

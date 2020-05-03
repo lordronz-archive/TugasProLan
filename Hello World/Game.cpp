@@ -1,7 +1,7 @@
 #include "Game.h"
 
 Game::Game() :
-	view(sf::View(sf::FloatRect(640, 360, 256, 144))), walls {wall}, zombieShot(false), gameOver(false)
+	view(sf::View(sf::FloatRect(640, 360, 256, 144))), walls {wall}, zombieShot(false), gameOver(false), score(0)
 {
 	if (!cursorText.loadFromFile("Textures/pointer.png"))
 		std::cout << "ERROR LOADING CURSOR TEXTURE" << std::endl;
@@ -87,7 +87,6 @@ Game::Game() :
 Game::~Game() {
 	zombies = std::vector<Zombie>();
 	bullets = std::vector<Bullet>();
-
 }
 
 sf::Vector2f Game::checkViewCenter() {
@@ -235,6 +234,7 @@ void Game::Render()
 		window.Draw(*player.getLegsSprite());
 		window.Draw(*player.getPlayerSprite());
 		window.Draw(*player.getGunSprite());
+		window.Draw(player.nightBox);
 		for (size_t i = 0; i < bullets.size(); ++i) {
 			if (bullets[i].projectile.getPosition().x < (checkViewCenter().x + 128) && bullets[i].projectile.getPosition().x > (checkViewCenter().x - 128) && bullets[i].projectile.getPosition().y < (checkViewCenter().y + 72) && bullets[i].projectile.getPosition().y > (checkViewCenter().y - 72))
 				window.Draw(bullets[i].projectile);

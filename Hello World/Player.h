@@ -24,6 +24,7 @@ private:
 	sf::Clock clock2;
 	sf::Clock stepTimer;
 	sf::Clock movementTime;
+	sf::Clock nightTimer;
 	sf::SoundBuffer weaponSfxBuffer;
 	sf::Sound weaponSfx;
 	sf::SoundBuffer walkSfxBuffer;
@@ -33,6 +34,8 @@ private:
 	bool Move(float moveX, float moveY);
 	float dt1;
 	float dt2;
+	unsigned int nightCount;
+	bool isIncreasing;
 
 public:
 	Player();
@@ -46,10 +49,14 @@ public:
 	sf::Vector2f getMousePos();
 	Collider GetCollider();
 	void resetLocation();
+	void updateTime();
+	void resetTime();
 	int healthPoints;
 	bool isDead;
 	bool isFiring;
+	bool isMidNight;
 	bool fire;
+	sf::RectangleShape nightBox;
 };
 
 #endif
