@@ -1,7 +1,7 @@
 #include "Game.h"
 
 Game::Game() :
-	view(sf::View(sf::FloatRect(640, 360, 256, 144))), walls {wall}, zombieShot(false)
+	view(sf::View(sf::FloatRect(640, 360, 256, 144))), walls {wall}, zombieShot(false), gameOver(false)
 {
 	if (!cursorText.loadFromFile("Textures/pointer.png"))
 		std::cout << "ERROR LOADING CURSOR TEXTURE" << std::endl;
@@ -82,15 +82,12 @@ Game::Game() :
 	};
 	map.load(tiles);
 	srand(static_cast<unsigned int>(time(NULL)));
-	zombie = new Zombie();
-	zombies.push_back(*zombie);
-	
 }
 
 Game::~Game() {
 	zombies = std::vector<Zombie>();
 	bullets = std::vector<Bullet>();
-	delete zombie;
+
 }
 
 sf::Vector2f Game::checkViewCenter() {
@@ -112,6 +109,10 @@ sf::Vector2f Game::checkViewCenter() {
 }
 
 void Game::updatePlayer() {
+	if (player.healthPoints <= 0.f) {
+		gameOver = true;
+		gOver.setScore(score);
+	}
 	sf::RenderWindow* win = window.getWindow();
 	sf::Vector2f playerPos = player.getCharCoord();
 	player.updatePlayer(win);
@@ -144,7 +145,7 @@ void Game::updateWalls() {
 		for (size_t j = 0; j < bullets.size(); ++j) {
 			if (bullets[j].projectile.getGlobalBounds().intersects(walls[i].body.getGlobalBounds())) {
 				float distance = sqrt(pow((player.getCharCoord().x - bullets[j].projectile.getPosition().x), 2) + pow((player.getCharCoord().y - bullets[j].projectile.getPosition().y), 2));
-				ricochetSfx.setVolume(std::max((100.f - distance / 5.f), 1.f));
+				ricochetSfx.setVolume(std::min(std::max((100.f - distance / 5.f), 1.f), 100.f));
 				bullets.erase(bullets.begin() + j);
 				bullets.shrink_to_fit();
 				ricochetSfx.play();
@@ -155,17 +156,14 @@ void Game::updateWalls() {
 
 void Game::updateZombie(sf::Vector2f playerPos)
 {
-	if (zombies.size() < 4) {
-		zombie = new Zombie();
-		if (!zombie)
-			std::cout << "memory allocation failed" << std::endl;
-		else
-			zombies.push_back(*zombie);
+	if (zombies.size() < 6) {
+		zombies.push_back(zombie);
+		zombies[zombies.size() - 1].setLocation();
 	}
 
 	for (size_t i = 0; i < zombies.size(); ++i) {
 		zombieShot = false;
-		if (sqrt(pow((zombies[i].zombiePosition.x - playerPos.x), 2) + pow((zombies[i].zombiePosition.y - playerPos.y), 2)) > 20)
+		if (sqrt(pow((zombies[i].zombiePosition.x - playerPos.x), 2) + pow((zombies[i].zombiePosition.y - playerPos.y), 2)) > 20.f)
 			zombies[i].Move(playerPos);
 		else {
 			if (zombies[i].attack())
@@ -179,9 +177,9 @@ void Game::updateZombie(sf::Vector2f playerPos)
 			}
 		}
 		zombies[i].update(zombieShot, playerPos);
-		if (zombies[i].healthPoints <= 0) {
+		if (zombies[i].reallyDead) {
 			zombies.erase(zombies.begin() + i);
-			zombies.shrink_to_fit();
+			score += 10;
 			--i;
 		}
 	}
@@ -191,12 +189,12 @@ void Game::Update() {
 	
 	window.Update(); // Update window events.
 
-	if (window.checkIfBegin())
+	if (window.checkIfBegin() && !gameOver)
 	{
 		cursor.setPosition(player.getMousePos());
 
-		updatePlayer();
 		updateZombie(player.getCharCoord());
+		updatePlayer();
 		updateWalls();
 
 		//set view relative to player
@@ -205,8 +203,16 @@ void Game::Update() {
 
 	}
 		
-	else if (!window.checkIfBegin())
+	else if (!window.checkIfBegin() || gameOver)
 	{
+		if (gOver.select(gameOver, window.getWindow()) && gameOver) {
+			gameOver = false;
+			player.healthPoints = 100;
+			window.togglePlay();
+			gOver.toggler = false;
+			player.resetLocation();
+			zombies.clear();
+		}
 		view.setSize(sf::Vector2f(1280, 720));
 		view.setCenter(sf::Vector2f(640, 360));
 	}
@@ -215,9 +221,9 @@ void Game::Update() {
 
 void Game::Render()
 {
-	//window.View(view);
+	window.View(view);
 	window.BeginDraw();
-	if (window.checkIfBegin()) {
+	if (window.checkIfBegin() && !gameOver) {
 		window.Draw(map);
 		for (size_t i = 0; i < zombies.size(); ++i) {
 			//if (zombies[i].zombieSprite.getPosition().x < (checkViewCenter().x + 150) && zombies[i].zombieSprite.getPosition().x >(checkViewCenter().x - 150) && zombies[i].zombieSprite.getPosition().y < (checkViewCenter().y + 90) && zombies[i].zombieSprite.getPosition().y >(checkViewCenter().y - 90)) {
@@ -236,14 +242,19 @@ void Game::Render()
 		window.Draw(cursor);
 		window.Draw(*GUI.getHealthGUI());
 	}
+	else if (gameOver)
+	{
+		for (size_t i = 0; i < 3; ++i)
+			window.Draw(gOver.text[i]);
+	}
 	//for drawing in main menu
-	else
+	else if (!window.checkIfBegin())
 	{
 		sf::Sprite* temp = nullptr;
 		window.Draw(*temp);
 	}
 
-	window.EndDraw();
+	window.EndDraw(gameOver);
 }
 
 Window* Game::GetWindow()

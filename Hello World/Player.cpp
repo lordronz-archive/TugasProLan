@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(500), isDead(false), stepCount(0)
+Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(100), isDead(false), stepCount(0)
 {
 	// Setting up class members.
 	if (!playerTexture.loadFromFile("Textures/ct1.bmp"))
@@ -168,6 +168,11 @@ Collider Player::GetCollider()
 		textSize.x * player.getScale().x,
 		textSize.y * player.getScale().y);
 	return Collider(spriteSize / 2.0f, player.getPosition(), nullptr, &player);
+}
+
+void Player::resetLocation()
+{
+	player.setPosition(sf::Vector2f(640.f, 360.f));
 }
 
 sf::Vector2f Player::getMousePos()

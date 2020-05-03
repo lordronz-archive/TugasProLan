@@ -10,6 +10,7 @@
 #include "Wall.h"
 #include "Zombie.h"
 #include "GUI.h"
+#include "GameOver.h"
 
 #include <array>
 
@@ -19,8 +20,9 @@ private:
 	Player player;
 	Window window;
 	Bullet b1;
-	Zombie *zombie;
+	Zombie zombie;
 	GUI GUI;
+	GameOver gOver;
 	std::vector<Zombie> zombies;
 	std::vector<Bullet> bullets;
 	Map map;
@@ -36,6 +38,8 @@ private:
 	sf::Sound ricochetSfx;
 	sf::SoundBuffer ricochetBuffer;
 	bool zombieShot;
+	bool gameOver;
+	unsigned int score;
 
 public:
 	Game();

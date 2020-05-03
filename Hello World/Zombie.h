@@ -16,6 +16,7 @@ public:
     sf::Sprite blood;
     void Move(sf::Vector2f playerPosition);
     void update(bool shot, sf::Vector2f playerPosition);
+    void setLocation();
     bool attack();
     sf::Vector2f zombiePosition;
     Collider GetCollider();
@@ -23,6 +24,7 @@ public:
     int tiles[23][40];
     int healthPoints;
     bool bloodSplattered;
+    bool reallyDead;
 
 private:
     int xPos;
@@ -44,6 +46,9 @@ private:
     sf::Sound zombieHurt;
     int bloodCount;
     int attackCount;
+    bool dead;
+    void death();
+    sf::Clock deathTimer;
 };
 
 #endif // !ZOMBIE_H

@@ -15,10 +15,12 @@ void Window::BeginDraw()
 	window.clear();
 }
 
-void Window::EndDraw()
+void Window::EndDraw(bool gameOver)
 {
 	window.display();
 	play ? window.setMouseCursorVisible(false) : window.setMouseCursorVisible(true);
+	if (gameOver)
+		window.setMouseCursorVisible(true);
 }
 
 void Window::Update()
@@ -129,6 +131,11 @@ void Window::Draw(sf::Drawable& l_drawable)
 bool Window::checkIfBegin()
 {
 	return play;
+}
+
+void Window::togglePlay()
+{
+	play = false;
 }
 
 void Window::Setup(const std::string& l_title, const sf::Vector2u& l_size)

@@ -45,6 +45,7 @@ public:
 	sf::Vector2f getPlayerCenter();
 	sf::Vector2f getMousePos();
 	Collider GetCollider();
+	void resetLocation();
 	int healthPoints;
 	bool isDead;
 	bool isFiring;

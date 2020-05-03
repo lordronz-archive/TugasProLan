@@ -12,7 +12,6 @@ class GUI
 private:
 	sf::Text health;
 	sf::Font font;
-	std::stringstream ss;
 
 public:
 	GUI();

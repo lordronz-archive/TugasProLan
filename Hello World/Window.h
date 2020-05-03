@@ -25,7 +25,7 @@ public:
 	~Window();
 	sf::RenderWindow window;
 	void BeginDraw(); // Clear the window.
-	void EndDraw(); // Display the changes.
+	void EndDraw(bool gameOver); // Display the changes.
 	void Update();
 	bool IsDone();
 	bool IsFullscreen();
@@ -35,6 +35,7 @@ public:
 	void Draw(sf::Drawable& l_drawable);
 	void View(sf::View &view);
 	bool checkIfBegin();
+	void togglePlay();
 };
 
 #endif
