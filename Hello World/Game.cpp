@@ -6,9 +6,6 @@ Game::Game() :
 	if (!cursorText.loadFromFile("Textures/pointer.png"))
 		std::cout << "ERROR LOADING CURSOR TEXTURE" << std::endl;
 
-	zombie = new Zombie;
-	zombies.push_back(*zombie);
-
 	sf::Vector2u textSize = cursorText.getSize();
 	textSize.x /= 2;
 	textSize.y /= 2;
@@ -84,6 +81,10 @@ Game::Game() :
 
 	};
 	map.load(tiles);
+	srand(static_cast<unsigned int>(time(NULL)));
+	zombie = new Zombie();
+	zombies.push_back(*zombie);
+	
 }
 
 Game::~Game() {
@@ -154,13 +155,21 @@ void Game::updateWalls() {
 
 void Game::updateZombie(sf::Vector2f playerPos)
 {
-	zombieShot = false;
+	if (zombies.size() < 4) {
+		zombie = new Zombie();
+		if (!zombie)
+			std::cout << "memory allocation failed" << std::endl;
+		else
+			zombies.push_back(*zombie);
+	}
+
 	for (size_t i = 0; i < zombies.size(); ++i) {
+		zombieShot = false;
 		if (sqrt(pow((zombies[i].zombiePosition.x - playerPos.x), 2) + pow((zombies[i].zombiePosition.y - playerPos.y), 2)) > 20)
 			zombies[i].Move(playerPos);
 		else {
 			if (zombies[i].attack())
-			player.healthPoints -= 20;
+				player.healthPoints -= 20;
 		}
 		for (size_t j = 0; j < bullets.size(); ++j) {
 			if (bullets[j].projectile.getGlobalBounds().intersects(zombies[i].zombieSprite.getGlobalBounds())) {
@@ -170,7 +179,12 @@ void Game::updateZombie(sf::Vector2f playerPos)
 			}
 		}
 		zombies[i].update(zombieShot, playerPos);
-	}	
+		if (zombies[i].healthPoints <= 0) {
+			zombies.erase(zombies.begin() + i);
+			zombies.shrink_to_fit();
+			--i;
+		}
+	}
 }
 
 void Game::Update() {
@@ -189,7 +203,6 @@ void Game::Update() {
 		view.setSize(sf::Vector2f(256, 144));
 		view.setCenter(checkViewCenter());
 
-
 	}
 		
 	else if (!window.checkIfBegin())
@@ -202,16 +215,16 @@ void Game::Update() {
 
 void Game::Render()
 {
-	window.View(view);
+	//window.View(view);
 	window.BeginDraw();
 	if (window.checkIfBegin()) {
 		window.Draw(map);
 		for (size_t i = 0; i < zombies.size(); ++i) {
-			if (zombies[i].zombieSprite.getPosition().x < (checkViewCenter().x + 150) && zombies[i].zombieSprite.getPosition().x >(checkViewCenter().x - 150) && zombies[i].zombieSprite.getPosition().y < (checkViewCenter().y + 90) && zombies[i].zombieSprite.getPosition().y >(checkViewCenter().y - 90)) {
+			//if (zombies[i].zombieSprite.getPosition().x < (checkViewCenter().x + 150) && zombies[i].zombieSprite.getPosition().x >(checkViewCenter().x - 150) && zombies[i].zombieSprite.getPosition().y < (checkViewCenter().y + 90) && zombies[i].zombieSprite.getPosition().y >(checkViewCenter().y - 90)) {
 				window.Draw(zombies[i].zombieSprite);
 				if (zombies[i].bloodSplattered)
 					window.Draw(zombies[i].blood);
-			}
+			//}
 		}
 		window.Draw(*player.getLegsSprite());
 		window.Draw(*player.getPlayerSprite());

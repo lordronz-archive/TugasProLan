@@ -61,16 +61,12 @@ bool Player::Move(float moveX, float moveY)
 	float stepTime = stepTimer.getElapsedTime().asSeconds();
 	sf::Vector2f pos = player.getPosition();
 	if (moveX > 0 || moveY > 0) {
-		if (pos.x + moveX >= 1280)
-			moveX = 0;
-		if (pos.y + moveY >= 720)
-			moveY = 0;
+		moveX = pos.x + moveX >= 1280 ? 0 : moveX;
+		moveY = pos.y + moveY >= 720 ? 0 : moveY;
 	}
 	if (moveX < 0 || moveY < 0) {
-		if (pos.x + moveX <= 0)
-			moveX = 0;
-		if (pos.y + moveY <= 0)
-			moveY = 0;
+		moveX = pos.x + moveX <= 0 ? 0 : moveX;
+		moveY = pos.y + moveY <= 0 ? 0 : moveY;
 	}
 
 	if (moveX == 0 && moveY == 0)
@@ -91,36 +87,28 @@ bool Player::Move(float moveX, float moveY)
 
 void Player::movePlayer()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 		Move(-.707f, -.707f);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 		Move(.707f, -.707f);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 		Move(-.707f, .707f);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 		Move(.707f, .707f);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 		Move(-1.f, 0.f);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 		Move(1.f, 0.f);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-	{
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 		Move(0.f, -1.f);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-	{
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
 		Move(0.f, 1.f);
 	}
 }

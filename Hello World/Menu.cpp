@@ -83,8 +83,7 @@ bool Menu::checkExit()
 
 void Menu::moveUp()
 {
-	if (selectedItemIndex - 1 >= 0)
-	{
+	if (selectedItemIndex - 1 >= 0) {
 		menuSfx.play();
 		menu[selectedItemIndex].setFillColor(sf::Color::White);
 		--selectedItemIndex;
@@ -101,8 +100,7 @@ void Menu::moveUp()
 		menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 		menuBar[3].color = sf::Color(43, 126, 227, 128);
 	}
-	else
-	{
+	else {
 		menuSfx.play();
 		menu[selectedItemIndex].setFillColor(sf::Color::White);
 		selectedItemIndex = 2;
@@ -123,8 +121,7 @@ void Menu::moveUp()
 
 void Menu::moveDown()
 {
-	if (selectedItemIndex + 1 < MAX)
-	{
+	if (selectedItemIndex + 1 < MAX) {
 		menuSfx.play();
 		menu[selectedItemIndex].setFillColor(sf::Color::White);
 		++selectedItemIndex;
@@ -137,8 +134,7 @@ void Menu::moveDown()
 
 		menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 	}
-	else
-	{
+	else {
 		menuSfx.play();
 		menu[selectedItemIndex].setFillColor(sf::Color::White);
 		selectedItemIndex = 0;
@@ -159,18 +155,15 @@ void Menu::mouseSelect(sf::RenderWindow *window, bool play)
 
 	sf::Vector2f mousePixelPos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 
-	if (play)
-	{
+	if (play) {
 		selectedItemIndex = 0;
 		menu[selectedItemIndex].setFillColor(sf::Color::Red);
 		menu[1].setFillColor(sf::Color::White);
 		menu[2].setFillColor(sf::Color::White);
 	}
 
-	if (!play)
-	{
-		if (menu[0].getGlobalBounds().contains(mousePixelPos))
-		{
+	if (!play) {
+		if (menu[0].getGlobalBounds().contains(mousePixelPos)) {
 			if (selectedItemIndex != 0)
 				menuSfx.play();
 			selectedItemIndex = 0;
@@ -186,17 +179,13 @@ void Menu::mouseSelect(sf::RenderWindow *window, bool play)
 			menu[1].setFillColor(sf::Color::White);
 			menu[2].setFillColor(sf::Color::White);
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			{
 				mouseClick = true;
-			}
-			else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mouseClick)
-			{
+			else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mouseClick) {
 				this->play = true;
 				mouseClick = false;
 			}
 		}
-		else if (menu[1].getGlobalBounds().contains(mousePixelPos))
-		{
+		else if (menu[1].getGlobalBounds().contains(mousePixelPos)) {
 			if (selectedItemIndex != 1)
 				menuSfx.play();
 			selectedItemIndex = 1;
@@ -212,8 +201,7 @@ void Menu::mouseSelect(sf::RenderWindow *window, bool play)
 			menu[0].setFillColor(sf::Color::White);
 			menu[2].setFillColor(sf::Color::White);
 		}
-		else if (menu[2].getGlobalBounds().contains(mousePixelPos))
-		{
+		else if (menu[2].getGlobalBounds().contains(mousePixelPos)) {
 			if (selectedItemIndex != 2)
 				menuSfx.play();
 			selectedItemIndex = 2;
@@ -229,11 +217,8 @@ void Menu::mouseSelect(sf::RenderWindow *window, bool play)
 			menu[0].setFillColor(sf::Color::White);
 			menu[1].setFillColor(sf::Color::White);
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			{
 				mouseClick = true;
-			}
-			else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mouseClick)
-			{
+			else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mouseClick) {
 				exit = true;
 				mouseClick = false;
 			}

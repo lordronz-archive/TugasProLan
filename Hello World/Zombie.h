@@ -11,6 +11,7 @@ class Zombie
 {
 public:
     Zombie();
+    ~Zombie();
     sf::Sprite zombieSprite;
     sf::Sprite blood;
     void Move(sf::Vector2f playerPosition);
@@ -18,6 +19,7 @@ public:
     bool attack();
     sf::Vector2f zombiePosition;
     Collider GetCollider();
+    sf::Sprite* getSprite();
     int tiles[23][40];
     int healthPoints;
     bool bloodSplattered;
