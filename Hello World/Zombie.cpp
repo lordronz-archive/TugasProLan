@@ -244,15 +244,18 @@ bool Zombie::attack()
 {
 	if (!dead) {
 		bool attacking = false;
-		if (attackTimer.getElapsedTime().asSeconds() > .5f) {
-			++attackCount;
+		if (attackTimer.getElapsedTime().asSeconds() > 1.f) {
 			attackTimer.restart();
 			attacking = true;
+			attackCount = 1;
 		}
-		attackCount = attackCount > 1 ? 0 : attackCount;
+		//attackCount = attackCount > 1 ? 0 : attackCount;
+		attackCount = attackCount == 1 && attackTimer.getElapsedTime().asSeconds() < 1.f && attackTimer.getElapsedTime().asSeconds() >= .5f ? 0 : attackCount;
 		zombieSprite.setTextureRect(sf::IntRect(zombieTexture.getSize().x / 2 * attackCount, zombieTexture.getSize().y / 3 * 1, zombieTexture.getSize().x / 2, zombieTexture.getSize().y / 3));
 		return attacking;
 	}
+	else
+		return false;
 }
 
 Collider Zombie::GetCollider()

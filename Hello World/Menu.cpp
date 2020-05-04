@@ -163,6 +163,13 @@ void Menu::mouseSelect(sf::RenderWindow* window, bool play)
 		menu[selectedItemIndex].setFillColor(sf::Color::Red);
 		menu[1].setFillColor(sf::Color::White);
 		menu[2].setFillColor(sf::Color::White);
+		menuBar[0].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y);
+
+		menuBar[1].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y);
+
+		menuBar[2].position = sf::Vector2f(1280, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
+
+		menuBar[3].position = sf::Vector2f(0, menu[selectedItemIndex].getPosition().y + 1.5f * menu[selectedItemIndex].getCharacterSize());
 	}
 
 	if (!play) {

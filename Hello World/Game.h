@@ -37,6 +37,8 @@ private:
 	void updateZombie(sf::Vector2f playerPos);
 	sf::Sound ricochetSfx;
 	sf::SoundBuffer ricochetBuffer;
+	sf::Sound attacked;
+	sf::SoundBuffer attackedBuffer;
 	bool zombieShot;
 	bool gameOver;
 	unsigned int score;

@@ -20,7 +20,8 @@ public:
 
 private:
 	sf::Font font;
-	bool mouseClick;
+	bool mouseClick0;
+	bool mouseClick1;
 };
 
 #endif

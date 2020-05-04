@@ -18,7 +18,11 @@ Game::Game() :
 		std::cout << "ERROR LOADING RICOCHET SOUND" << std::endl;
 
 	ricochetSfx.setBuffer(ricochetBuffer);
-	ricochetSfx.setVolume(50.f);
+
+	if (!attackedBuffer.loadFromFile("Sound/attacked.ogg"))
+		std::cout << "ERROR LOADING BITE SOUND" << std::endl;
+
+	attacked.setBuffer(attackedBuffer);
 
 	//size							position
 	walls[0].initWall(sf::Vector2f(64.0f, 96.0f), sf::Vector2f(416.0f, 656.0f));
@@ -165,8 +169,10 @@ void Game::updateZombie(sf::Vector2f playerPos)
 		if (sqrt(pow((zombies[i].zombiePosition.x - playerPos.x), 2) + pow((zombies[i].zombiePosition.y - playerPos.y), 2)) > 20.f)
 			zombies[i].Move(playerPos);
 		else {
-			if (zombies[i].attack())
+			if (zombies[i].attack()) {
 				player.healthPoints = player.isMidNight ? player.healthPoints -= 35 : player.healthPoints -= 20;
+				attacked.play();
+			}
 		}
 		for (size_t j = 0; j < bullets.size(); ++j) {
 			if (bullets[j].projectile.getGlobalBounds().intersects(zombies[i].zombieSprite.getGlobalBounds())) {
@@ -199,7 +205,6 @@ void Game::Update() {
 		//set view relative to player
 		view.setSize(sf::Vector2f(256, 144));
 		view.setCenter(checkViewCenter());
-
 	}
 
 	else if (!window.checkIfBegin() || gameOver || window.help)
@@ -219,6 +224,7 @@ void Game::Update() {
 		}
 		else if (gOver.helpSelect(window.help, window.getWindow()) && window.help) {
 			window.help = false;
+			window.togglePlay();
 			gOver.helpToggler = false;
 		}
 		view.setSize(sf::Vector2f(1280, 720));
@@ -231,7 +237,7 @@ void Game::Render()
 {
 	window.View(view);
 	window.BeginDraw();
-	if (window.checkIfBegin() && !gameOver) {
+	if (window.checkIfBegin() && !gameOver && !window.help) {
 		window.Draw(map);
 		for (size_t i = 0; i < zombies.size(); ++i) {
 			//if (zombies[i].zombieSprite.getPosition().x < (checkViewCenter().x + 150) && zombies[i].zombieSprite.getPosition().x >(checkViewCenter().x - 150) && zombies[i].zombieSprite.getPosition().y < (checkViewCenter().y + 90) && zombies[i].zombieSprite.getPosition().y >(checkViewCenter().y - 90)) {
@@ -263,7 +269,7 @@ void Game::Render()
 			window.Draw(gOver.text[i]);
 	}
 	//for drawing in main menu
-	else if (!window.checkIfBegin())
+	else if (!window.checkIfBegin() && !window.help)
 	{
 		sf::Sprite* temp = nullptr;
 		window.Draw(*temp);

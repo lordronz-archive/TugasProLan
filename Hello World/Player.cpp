@@ -43,7 +43,7 @@ Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(10
 	nightBox.setPosition(sf::Vector2f(640.f, 360.f));
 	nightBox.setFillColor(sf::Color(30, 30, 30, 0));
 
-	if (!weaponSfxBuffer.loadFromFile("Sound/galil.wav"))
+	if (!weaponSfxBuffer.loadFromFile("Sound/galil.ogg"))
 		std::cout << "ERROR LOADING WEAPON SOUND" << std::endl;
 
 	weaponSfx.setBuffer(weaponSfxBuffer);

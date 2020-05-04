@@ -1,6 +1,6 @@
 #include "GameOverHelp.h"
 
-GameOverHelp::GameOverHelp() :toggler(false), mouseClick(false), helpToggler(false)
+GameOverHelp::GameOverHelp() :toggler(false), mouseClick0(false), mouseClick1(false), helpToggler(false)
 {
 	if (!font.loadFromFile("DoubleFeature.ttf"))
 		std::cout << "ERROR LOADING FONT" << std::endl;
@@ -33,6 +33,14 @@ bool GameOverHelp::helpSelect(bool gameOver, sf::RenderWindow* window)
 		helpToggler = true;
 	if (helpToggler && !sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		return true;
+	if (text[1].getGlobalBounds().contains((sf::Vector2f)(sf::Mouse::getPosition(*window)))) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			mouseClick1 = true;
+		if (mouseClick1 && !sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			return true;
+	}
+	else
+		mouseClick1 = false;
 	return false;
 }
 
@@ -44,12 +52,12 @@ bool GameOverHelp::select(bool gameOver, sf::RenderWindow* window)
 		return true;
 	if (text[2].getGlobalBounds().contains((sf::Vector2f)(sf::Mouse::getPosition(*window)))) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			mouseClick = true;
-		if (mouseClick && !sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			mouseClick0 = true;
+		if (mouseClick0 && !sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			return true;
 	}
 	else
-		mouseClick = false;
+		mouseClick0= false;
 	return false;
 }
 
