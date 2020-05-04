@@ -14,6 +14,11 @@ Game::Game() :
 	cursor.setOrigin(textSize.x / 2.0f, textSize.y / 2.0f);
 	cursor.setScale(0.25, 0.25);
 
+	if (!bgSoundBuffer.loadFromFile("Sound/bgsound.ogg"))
+		std::cout << "ERROR LOADING BACKGROUND SOUND" << std::endl;
+
+	bgSound.setBuffer(bgSoundBuffer);
+
 	if (!ricochetBuffer.loadFromFile("Sound/ricochet.ogg"))
 		std::cout << "ERROR LOADING RICOCHET SOUND" << std::endl;
 
@@ -202,6 +207,9 @@ void Game::Update() {
 		updatePlayer();
 		updateWalls();
 
+		if (bgSound.getStatus() == 0 && rand() % 500 == 8)
+			bgSound.play();
+
 		//set view relative to player
 		view.setSize(sf::Vector2f(256, 144));
 		view.setCenter(checkViewCenter());
@@ -209,7 +217,6 @@ void Game::Update() {
 
 	else if (!window.checkIfBegin() || gameOver || window.help)
 	{
-		std::cout << window.help << std::endl;
 		if (window.help)
 			gOver.help();
 		if (gOver.select(gameOver, window.getWindow()) && gameOver) {

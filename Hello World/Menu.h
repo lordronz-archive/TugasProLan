@@ -19,7 +19,7 @@ public:
 	sf::Text* menuDraw();
 	void moveUp();
 	void moveDown();
-	void mouseSelect(sf::RenderWindow *window, bool play);
+	void mouseSelect(sf::RenderWindow *window, bool play, bool help);
 	int getPressedItem();
 	bool checkMenuPlay();
 	bool checkExit();
@@ -33,6 +33,8 @@ private:
 	sf::Text menu[MAX];
 	sf::SoundBuffer menuSfxBuffer;
 	sf::Sound menuSfx;
+	sf::SoundBuffer menuClickBuffer;
+	sf::Sound menuClick;
 	sf::Texture menuBg;
 	sf::VertexArray menuBar;
 	bool play;

@@ -35,6 +35,8 @@ private:
 	void updatePlayer();
 	void updateWalls();
 	void updateZombie(sf::Vector2f playerPos);
+	sf::Sound bgSound;
+	sf::SoundBuffer bgSoundBuffer;
 	sf::Sound ricochetSfx;
 	sf::SoundBuffer ricochetBuffer;
 	sf::Sound attacked;

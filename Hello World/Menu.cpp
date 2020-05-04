@@ -45,6 +45,11 @@ Menu::Menu()
 
 	menuSfx.setBuffer(menuSfxBuffer);
 
+	if (!menuClickBuffer.loadFromFile("Sound/devil-may-cry-menu-sound.ogg"))
+		std::cout << "ERROR LOADING MENU SOUND" << std::endl;
+
+	menuClick.setBuffer(menuClickBuffer);
+
 	if (!menuBg.loadFromFile("Textures/Desert.png"))
 		std::cout << "ERROR LOADING MENU BG IMAGE" << std::endl;
 }
@@ -68,6 +73,7 @@ sf::Texture* Menu::drawMenuBg()
 
 int Menu::getPressedItem()
 {
+	menuClick.play();
 	return selectedItemIndex;
 }
 
@@ -154,9 +160,10 @@ void Menu::moveDown()
 	}
 }
 
-void Menu::mouseSelect(sf::RenderWindow* window, bool play)
+void Menu::mouseSelect(sf::RenderWindow* window, bool play, bool help)
 {
 	this->play = play;
+	this->help = help;
 
 	if (play) {
 		selectedItemIndex = 0;
@@ -193,6 +200,7 @@ void Menu::mouseSelect(sf::RenderWindow* window, bool play)
 				mouseClick = true;
 			else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mouseClick) {
 				this->play = true;
+				menuClick.play();
 				mouseClick = false;
 			}
 		}
@@ -214,7 +222,8 @@ void Menu::mouseSelect(sf::RenderWindow* window, bool play)
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				mouseClick = true;
 			else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mouseClick) {
-				help = true;
+				this->help = true;
+				menuClick.play();
 				mouseClick = false;
 			}
 		}

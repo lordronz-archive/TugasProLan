@@ -166,33 +166,7 @@ void Zombie::Move(sf::Vector2f playerPosition)
 
 			zombieSprite.move(currentSpeed);
 		}
-		/*else if (distance > 220.f) {
-			if (clock0.getElapsedTime().asSeconds() > 4.f) {
-				do
-				{
-					randomLoc = sf::Vector2f(zombiePosition.x + (rand() % 2 == 0 ? rand() % 101 + 50 : rand() % 101 - 150), zombiePosition.y + (rand() % 2 == 0 ? rand() % 101 + 50 : rand() % 101 - 150));
-				} while (wallCheck(randomLoc));
-				clock0.restart();
-			}
-			dx = zombiePosition.x - randomLoc.x;
-			dy = zombiePosition.y - randomLoc.y;
-			direction = randomLoc - zombiePosition;
-			normalizedDir = direction / sqrt(pow(direction.x, 2) + pow(direction.y, 2));
-
-			speed = .5f;
-
-			const float PI = 3.14159265f;
-
-			float rotation = (atan2(dy, dx)) * 180 / PI;
-
-			zombieSprite.setRotation(rotation - 90);
-
-			sf::Vector2f currentSpeed = normalizedDir * speed;
-
-			zombieSprite.move(currentSpeed);
-		}*/
 		zombieSprite.setTextureRect(sf::IntRect(zombieTexture.getSize().x / 2 * 0, zombieTexture.getSize().y / 3 * 1, zombieTexture.getSize().x / 2, zombieTexture.getSize().y / 3));
-
 	}
 }
 
@@ -224,7 +198,7 @@ void Zombie::update(bool shot, sf::Vector2f playerPosition, bool midNight)
 
 void Zombie::setLocation()
 {
-	sf::Vector2f zombieLoc[12];
+	sf::Vector2f zombieLoc[15];
 	zombieLoc[0] = sf::Vector2f(352.f, 64.f);
 	zombieLoc[1] = sf::Vector2f(64.f, 352.f);
 	zombieLoc[2] = sf::Vector2f(320.f, 384.f);
@@ -237,7 +211,10 @@ void Zombie::setLocation()
 	zombieLoc[9] = sf::Vector2f(544.f, 64.f);
 	zombieLoc[10] = sf::Vector2f(64.f, 300.f);
 	zombieLoc[11] = sf::Vector2f(1152.f, 32.f);
-	zombieSprite.setPosition(zombieLoc[rand() % 12]);
+	zombieLoc[12] = sf::Vector2f(1120.f, 512.f);
+	zombieLoc[13] = sf::Vector2f(1024.f, 192.f);
+	zombieLoc[14] = sf::Vector2f(96.f, 192.f);
+	zombieSprite.setPosition(zombieLoc[rand() % 15]);
 }
 
 bool Zombie::attack()

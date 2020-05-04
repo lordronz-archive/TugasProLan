@@ -25,9 +25,10 @@ void Window::EndDraw(bool gameOver)
 
 void Window::Update()
 {
-	menu.mouseSelect(&window, play);
+	menu.mouseSelect(&window, play, help);
 	play = menu.checkMenuPlay();
 	m_isDone = menu.checkExit();
+	help = menu.checkHelp();
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
