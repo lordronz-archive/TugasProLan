@@ -247,11 +247,11 @@ void Game::Render()
 	if (window.checkIfBegin() && !gameOver && !window.help) {
 		window.Draw(map);
 		for (size_t i = 0; i < zombies.size(); ++i) {
-			//if (zombies[i].zombieSprite.getPosition().x < (checkViewCenter().x + 150) && zombies[i].zombieSprite.getPosition().x >(checkViewCenter().x - 150) && zombies[i].zombieSprite.getPosition().y < (checkViewCenter().y + 90) && zombies[i].zombieSprite.getPosition().y >(checkViewCenter().y - 90)) {
+			if (zombies[i].zombieSprite.getPosition().x < (checkViewCenter().x + 150) && zombies[i].zombieSprite.getPosition().x >(checkViewCenter().x - 150) && zombies[i].zombieSprite.getPosition().y < (checkViewCenter().y + 90) && zombies[i].zombieSprite.getPosition().y >(checkViewCenter().y - 90)) {
 			window.Draw(zombies[i].zombieSprite);
 			if (zombies[i].bloodSplattered)
 				window.Draw(zombies[i].blood);
-			//}
+			}
 		}
 		window.Draw(*player.getLegsSprite());
 		window.Draw(*player.getPlayerSprite());

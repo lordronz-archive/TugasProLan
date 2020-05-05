@@ -8,7 +8,6 @@ GameOverHelp::GameOverHelp() :toggler(false), mouseClick0(false), mouseClick1(fa
 	text[0].setFont(font);
 	text[0].setFillColor(sf::Color::Red);
 	text[0].setOutlineThickness(3.f);
-	text[0].setCharacterSize(50);
 
 	text[1].setFont(font);
 	text[1].setFillColor(sf::Color::Red);
@@ -21,10 +20,12 @@ GameOverHelp::GameOverHelp() :toggler(false), mouseClick0(false), mouseClick1(fa
 
 void GameOverHelp::help()
 {
-	text[0].setString("JUST KILL THE ZOMBIES");
-	text[0].setPosition(sf::Vector2f(1280 / 2.0f - 280.f, 720 / 2 - 300.f));
+	text[0].setCharacterSize(35);
+	text[0].setLineSpacing(1.5f);
+	text[0].setString("YOU ARE TRAPPED WITH THE ZOMBIES !  WHAT ARE YOU GOING TO DO?\nLET YOURSELF BE EATEN BY THOSE NASTY ZOMBIES?\nOR MASSACRE ALL OF THOSE DISGUSTING ZOMBIES...");
+	text[0].setPosition(sf::Vector2f(1280 / 2.0f - 630.f, 720 / 2 - 300.f));
 	text[1].setString("OK");
-	text[1].setPosition(sf::Vector2f(1280 / 2.0f - 50.f, 720 / 2.f - 100.f));
+	text[1].setPosition(sf::Vector2f(1280 / 2.0f - 20.f, 720 / 2.f + 100.f));
 }
 
 bool GameOverHelp::helpSelect(bool gameOver, sf::RenderWindow* window)
@@ -63,6 +64,8 @@ bool GameOverHelp::select(bool gameOver, sf::RenderWindow* window)
 
 void GameOverHelp::setScore(unsigned int score)
 {
+	text[0].setCharacterSize(50);
+	text[0].setLineSpacing(1.f);
 	text[0].setString("WASTED");
 	text[0].setPosition(sf::Vector2f(1280 / 2.0f - 100.f, 720 / 2 - 300.f));
 	std::stringstream ss;

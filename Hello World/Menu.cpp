@@ -164,7 +164,6 @@ void Menu::mouseSelect(sf::RenderWindow* window, bool play, bool help)
 {
 	this->play = play;
 	this->help = help;
-
 	if (play) {
 		selectedItemIndex = 0;
 		menu[selectedItemIndex].setFillColor(sf::Color::Red);
@@ -226,6 +225,7 @@ void Menu::mouseSelect(sf::RenderWindow* window, bool play, bool help)
 				menuClick.play();
 				mouseClick = false;
 			}
+			std::cout << this->help << std::endl;
 		}
 		else if (menu[2].getGlobalBounds().contains(mousePixelPos)) {
 			if (selectedItemIndex != 2)

@@ -67,12 +67,10 @@ void Player::updateTime()
 	isIncreasing = nightCount == 180 ? false : isIncreasing;
 	if (isIncreasing && dt >= 1.0f) {
 		++nightCount;
-		std::cout << nightCount << std::endl;
 		nightTimer.restart();
 	}
 	else if (!isIncreasing && dt >= 1.0f) {
 		--nightCount;
-		std::cout << nightCount << std::endl;
 		nightTimer.restart();
 	}
 	isMidNight = nightCount > 150 ? true : false;
