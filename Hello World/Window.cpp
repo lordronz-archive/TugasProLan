@@ -8,8 +8,6 @@ Window::Window() :m_isDone(false), play(false), help(false)
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 
-Window::~Window() {}
-
 void Window::BeginDraw()
 {
 	window.clear();

@@ -11,7 +11,7 @@ void Bullet::fire(sf::RenderWindow* window, sf::Vector2f playerCenter)
 	sf::Vector2i mousePosition = sf::Mouse::getPosition(*window);
 	sf::Vector2f worldPosition = window->mapPixelToCoords(mousePosition);
 	aimDir = sf::Vector2f(worldPosition) - playerCenter;
-	aimDirNorm = aimDir / sqrt(pow(aimDir.x, 2) + pow(aimDir.y, 2));
+	aimDirNorm = aimDir / static_cast<float>(sqrt(pow(aimDir.x, 2) + pow(aimDir.y, 2)));
 	projectile.setPosition(playerCenter);
 	currVelocity = aimDirNorm * maxSpeed;
 }

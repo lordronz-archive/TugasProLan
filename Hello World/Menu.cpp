@@ -40,7 +40,7 @@ Menu::Menu()
 	menuBar[3].position = sf::Vector2f(0, menu[0].getPosition().y + 1.5f * menu[0].getCharacterSize());
 	menuBar[3].color = sf::Color(43, 126, 227, 128);
 
-	if (!menuSfxBuffer.loadFromFile("Sound/dmc_menu_select.wav"))
+	if (!menuSfxBuffer.loadFromFile("Sound/dmc_menu_select.ogg"))
 		std::cout << "ERROR LOADING MENU SOUND" << std::endl;
 
 	menuSfx.setBuffer(menuSfxBuffer);
@@ -225,7 +225,6 @@ void Menu::mouseSelect(sf::RenderWindow* window, bool play, bool help)
 				menuClick.play();
 				mouseClick = false;
 			}
-			std::cout << this->help << std::endl;
 		}
 		else if (menu[2].getGlobalBounds().contains(mousePixelPos)) {
 			if (selectedItemIndex != 2)

@@ -133,7 +133,7 @@ void Zombie::Move(sf::Vector2f playerPosition)
 		if (distance < 200.f && !wallCheck(playerPosition)) {
 			playerLocB4Lost = playerPosition;
 			direction = playerPosition - zombiePosition;
-			normalizedDir = direction / sqrt(pow(direction.x, 2) + pow(direction.y, 2));
+			normalizedDir = direction / static_cast<float>(sqrt(pow(direction.x, 2) + pow(direction.y, 2)));
 
 			speed = .8f;
 

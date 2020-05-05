@@ -22,7 +22,6 @@ private:
 
 public:
 	Window();
-	~Window();
 	sf::RenderWindow window;
 	void BeginDraw(); // Clear the window.
 	void EndDraw(bool gameOver); // Display the changes.
