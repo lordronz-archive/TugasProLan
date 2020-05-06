@@ -11,7 +11,6 @@ class Window
 {
 private:
 	void Setup(const std::string& l_title, const sf::Vector2u& l_size);
-	void Destroy();
 	void Create();
 	sf::Vector2u winSize;
 	std::string winTitle;
@@ -27,10 +26,8 @@ public:
 	void EndDraw(bool gameOver); // Display the changes.
 	void Update();
 	bool IsDone();
-	bool IsFullscreen();
 	sf::RenderWindow* getWindow();
 	sf::Vector2u GetWindowSize();
-	void ToggleFullscreen();
 	void Draw(sf::Drawable& l_drawable);
 	void View(sf::View& view);
 	bool checkIfBegin();

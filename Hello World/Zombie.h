@@ -42,13 +42,13 @@ private:
     sf::Clock bloodTimer;
     sf::Clock shotTimer;
     sf::Clock attackTimer;
+    sf::Clock deathTimer;
     sf::SoundBuffer zombieHurtBuffer;
     sf::Sound zombieHurt;
     int bloodCount;
     int attackCount;
     bool dead;
     void death();
-    sf::Clock deathTimer;
 };
 
 #endif // !ZOMBIE_H

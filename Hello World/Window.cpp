@@ -92,11 +92,6 @@ bool Window::IsDone()
 	return m_isDone;
 }
 
-bool Window::IsFullscreen()
-{
-	return m_isFullscreen;
-}
-
 void Window::View(sf::View& view)
 {
 	window.setView(view);
@@ -105,13 +100,6 @@ void Window::View(sf::View& view)
 sf::Vector2u Window::GetWindowSize()
 {
 	return winSize;
-}
-
-void Window::ToggleFullscreen()
-{
-	m_isFullscreen = !m_isFullscreen;
-	Destroy();
-	Create();
 }
 
 sf::RenderWindow* Window::getWindow()
@@ -149,11 +137,6 @@ void Window::Setup(const std::string& l_title, const sf::Vector2u& l_size)
 	m_isFullscreen = false;
 	m_isDone = false;
 	Create();
-}
-
-void Window::Destroy()
-{
-	window.close();
 }
 
 void Window::Create()

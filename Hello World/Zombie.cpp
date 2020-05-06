@@ -1,6 +1,6 @@
 #include "Zombie.h"
 
-Zombie::Zombie() :speed(0.5), xPos(0), yPos(0), tiles{0}, healthPoints(100), bloodCount(0), bloodSplattered(false), attackCount(0), dead(false), reallyDead(false)
+Zombie::Zombie() :speed(.8f), xPos(0), yPos(0), tiles{0}, healthPoints(100), bloodCount(0), bloodSplattered(false), attackCount(0), dead(false), reallyDead(false)
 {
 	if (!zombieTexture.loadFromFile("Textures/zombie.png"))
 		std::cout << "ERROR LOADING ZOMBIE TEXTURE" << std::endl;
