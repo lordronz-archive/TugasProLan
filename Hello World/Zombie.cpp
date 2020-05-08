@@ -152,7 +152,7 @@ void Zombie::Move(sf::Vector2f playerPosition)
 			dx = zombiePosition.x - playerLocB4Lost.x;
 			dy = zombiePosition.y - playerLocB4Lost.y;
 			direction = playerLocB4Lost - zombiePosition;
-			normalizedDir = direction / sqrt(pow(direction.x, 2) + pow(direction.y, 2));
+			normalizedDir = direction / static_cast<float>(sqrt(pow(direction.x, 2) + pow(direction.y, 2)));
 
 			speed = .8f;
 

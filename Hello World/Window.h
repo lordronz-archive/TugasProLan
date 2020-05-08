@@ -1,11 +1,9 @@
 #pragma once
-
-#include <math.h>
-
-#include "Menu.h"
-
 #ifndef WINDOW_H
 #define WINDOW_H
+
+#include <math.h>
+#include "Menu.h"
 
 class Window
 {
