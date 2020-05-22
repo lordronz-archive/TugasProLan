@@ -11,7 +11,6 @@ class Zombie
 {
 public:
     Zombie();
-    ~Zombie();
     sf::Sprite zombieSprite;
     sf::Sprite blood;
     void Move(sf::Vector2f playerPosition);
@@ -26,7 +25,7 @@ public:
     bool bloodSplattered;
     bool reallyDead;
 
-private:
+protected:
     int xPos;
     int yPos;
     float speed;

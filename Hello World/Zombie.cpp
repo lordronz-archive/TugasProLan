@@ -1,6 +1,6 @@
 #include "Zombie.h"
 
-Zombie::Zombie() :speed(.8f), xPos(0), yPos(0), tiles{0}, healthPoints(100), bloodCount(0), bloodSplattered(false), attackCount(0), dead(false), reallyDead(false)
+Zombie::Zombie(): xPos(0), yPos(0), tiles{0}, bloodCount(0), bloodSplattered(false), attackCount(0), dead(false), reallyDead(false)
 {
 	if (!zombieTexture.loadFromFile("Textures/zombie.png"))
 		std::cout << "ERROR LOADING ZOMBIE TEXTURE" << std::endl;
@@ -44,11 +44,6 @@ Zombie::Zombie() :speed(.8f), xPos(0), yPos(0), tiles{0}, healthPoints(100), blo
 		}
 	}
 	file.close();
-}
-
-Zombie::~Zombie()
-{
-
 }
 
 bool Zombie::wallCheck(sf::Vector2f destination)
@@ -135,8 +130,6 @@ void Zombie::Move(sf::Vector2f playerPosition)
 			direction = playerPosition - zombiePosition;
 			normalizedDir = direction / static_cast<float>(sqrt(pow(direction.x, 2) + pow(direction.y, 2)));
 
-			speed = .8f;
-
 			//Rotate the Zombie relative to player position
 			const float PI = 3.14159265f;
 
@@ -153,8 +146,6 @@ void Zombie::Move(sf::Vector2f playerPosition)
 			dy = zombiePosition.y - playerLocB4Lost.y;
 			direction = playerLocB4Lost - zombiePosition;
 			normalizedDir = direction / static_cast<float>(sqrt(pow(direction.x, 2) + pow(direction.y, 2)));
-
-			speed = .8f;
 
 			const float PI = 3.14159265f;
 

@@ -14,6 +14,14 @@ Game::Game() :
 	cursor.setOrigin(textSize.x / 2.0f, textSize.y / 2.0f);
 	cursor.setScale(0.25, 0.25);
 
+	if (!healthPickText.loadFromFile("Textures/HealthPickup.png"))
+		std::cout << "ERROR LOADING HEALTH_PICKUP TEXTURE" << std::endl;
+
+	textSize = healthPickText.getSize();
+	healthPickup.setScale(0.5f, 0.5f);
+	healthPickup.setTexture(healthPickText);
+	healthPickup.setOrigin(textSize.x / 2.0f, textSize.y / 2.0f);
+
 	if (!bgSoundBuffer.loadFromFile("Sound/bgsound.ogg"))
 		std::cout << "ERROR LOADING BACKGROUND SOUND" << std::endl;
 
@@ -94,7 +102,9 @@ Game::Game() :
 }
 
 Game::~Game() {
-	zombies = std::vector<Zombie>();
+	n_zombies = std::vector<NormalZombie>();
+	b_zombies = std::vector<BigZombie>();
+	healthPickups = std::vector <sf::Sprite>();
 	bullets = std::vector<Bullet>();
 }
 
@@ -142,14 +152,29 @@ void Game::updatePlayer() {
 			bullets.shrink_to_fit();
 		}
 	}
+
+	for (size_t i = 0; i < healthPickups.size(); ++i) {
+		if (healthPickups[i].getGlobalBounds().intersects(player.getPlayerSprite()->getGlobalBounds())) {
+			sf::Vector2f direction = playerPos - healthPickups[i].getPosition();
+			sf::Vector2f normalizedDir = direction / static_cast<float>(sqrt(pow(direction.x, 2) + pow(direction.y, 2)));
+			healthPickups[i].move(normalizedDir * 2.f);
+		}
+		if (sqrt(pow((healthPickups[i].getPosition().x - playerPos.x), 2) + pow((healthPickups[i].getPosition().y - playerPos.y), 2)) < 1.f) {
+			healthPickups.erase(healthPickups.begin() + i);
+			healthPickups.shrink_to_fit();
+			player.healthPoints = player.healthPoints + 10 >= 100 ? 100 : player.healthPoints + 10;
+		}
+	}
 }
 
 void Game::updateWalls() {
 	//Wall Collision
 	for (size_t i = 0; i < walls.size(); ++i) {
 		walls[i].GetCollider().checkCollision(player.GetCollider());
-		for (size_t j = 0; j < zombies.size(); ++j)
-			walls[i].GetCollider().checkCollision(zombies[j].GetCollider());
+		for (size_t j = 0; j < n_zombies.size(); ++j)
+			walls[i].GetCollider().checkCollision(n_zombies[j].GetCollider());
+		for (size_t j = 0; j < b_zombies.size(); ++j)
+			walls[i].GetCollider().checkCollision(b_zombies[j].GetCollider());
 		for (size_t j = 0; j < bullets.size(); ++j) {
 			if (bullets[j].projectile.getGlobalBounds().intersects(walls[i].body.getGlobalBounds())) {
 				float distance = sqrt(pow((player.getCharCoord().x - bullets[j].projectile.getPosition().x), 2) + pow((player.getCharCoord().y - bullets[j].projectile.getPosition().y), 2));
@@ -164,32 +189,67 @@ void Game::updateWalls() {
 
 void Game::updateZombie(sf::Vector2f playerPos)
 {
-	if (zombies.size() < 6) {
-		zombies.push_back(zombie);
-		zombies[zombies.size() - 1].setLocation();
+	//spawn a normal zombie
+	if (n_zombies.size() < 6) {
+		n_zombies.push_back(zombie);
+		n_zombies[n_zombies.size() - 1].setLocation();
+		//spawn a big zombie(or monster? idk)
+		if (rand() % 4 == 2 && b_zombies.size() < 2) {
+			b_zombies.push_back(b_zombie);
+			b_zombies[b_zombies.size() - 1].setLocation();
+		}
 	}
-
-	for (size_t i = 0; i < zombies.size(); ++i) {
+	//update normal zombies
+	for (size_t i = 0; i < n_zombies.size(); ++i) {
 		zombieShot = false;
-		if (sqrt(pow((zombies[i].zombiePosition.x - playerPos.x), 2) + pow((zombies[i].zombiePosition.y - playerPos.y), 2)) > 20.f)
-			zombies[i].Move(playerPos);
+		if (sqrt(pow((n_zombies[i].zombiePosition.x - playerPos.x), 2) + pow((n_zombies[i].zombiePosition.y - playerPos.y), 2)) > 20.f)
+			n_zombies[i].Move(playerPos);
 		else {
-			if (zombies[i].attack()) {
+			if (n_zombies[i].attack()) {
 				player.healthPoints = player.isMidNight ? player.healthPoints -= 35 : player.healthPoints -= 20;
 				attacked.play();
 			}
 		}
 		for (size_t j = 0; j < bullets.size(); ++j) {
-			if (bullets[j].projectile.getGlobalBounds().intersects(zombies[i].zombieSprite.getGlobalBounds())) {
+			if (bullets[j].projectile.getGlobalBounds().intersects(n_zombies[i].zombieSprite.getGlobalBounds())) {
 				bullets.erase(bullets.begin() + j);
 				bullets.shrink_to_fit();
 				zombieShot = true;
 			}
 		}
-		zombies[i].update(zombieShot, playerPos, player.isMidNight);
-		if (zombies[i].reallyDead) {
-			zombies.erase(zombies.begin() + i);
+		n_zombies[i].update(zombieShot, playerPos, player.isMidNight);
+		if (n_zombies[i].reallyDead) {
+			healthPickup.setPosition(n_zombies[i].zombiePosition);
+			healthPickups.push_back(healthPickup);
+			n_zombies.erase(n_zombies.begin() + i);
 			score += 10;
+			--i;
+		}
+	}
+	//update big zombies
+	for (size_t i = 0; i < b_zombies.size(); ++i) {
+		zombieShot = false;
+		if (sqrt(pow((b_zombies[i].zombiePosition.x - playerPos.x), 2) + pow((b_zombies[i].zombiePosition.y - playerPos.y), 2)) > 25.f)
+			b_zombies[i].Move(playerPos);
+		else {
+			if (b_zombies[i].attack()) {
+				player.healthPoints = player.isMidNight ? player.healthPoints -= 50 : player.healthPoints -= 35;
+				attacked.play();
+			}
+		}
+		for (size_t j = 0; j < bullets.size(); ++j) {
+			if (bullets[j].projectile.getGlobalBounds().intersects(b_zombies[i].zombieSprite.getGlobalBounds())) {
+				bullets.erase(bullets.begin() + j);
+				bullets.shrink_to_fit();
+				zombieShot = true;
+			}
+		}
+		b_zombies[i].update(zombieShot, playerPos, player.isMidNight);
+		if (b_zombies[i].reallyDead) {
+			healthPickup.setPosition(b_zombies[i].zombiePosition);
+			healthPickups.push_back(healthPickup);
+			b_zombies.erase(b_zombies.begin() + i);
+			score += 30;
 			--i;
 		}
 	}
@@ -226,7 +286,12 @@ void Game::Update() {
 			gOver.toggler = false;
 			player.resetLocation();
 			player.resetTime();
-			zombies.clear();
+			n_zombies.clear();
+			n_zombies.shrink_to_fit();
+			b_zombies.clear();
+			b_zombies.shrink_to_fit();
+			healthPickups.clear();
+			healthPickups.shrink_to_fit();
 			score = 0;
 		}
 		else if (gOver.helpSelect(window.help, window.getWindow()) && window.help) {
@@ -246,11 +311,23 @@ void Game::Render()
 	window.BeginDraw();
 	if (window.checkIfBegin() && !gameOver && !window.help) {
 		window.Draw(map);
-		for (size_t i = 0; i < zombies.size(); ++i) {
-			if (zombies[i].zombieSprite.getPosition().x < (checkViewCenter().x + 150) && zombies[i].zombieSprite.getPosition().x >(checkViewCenter().x - 150) && zombies[i].zombieSprite.getPosition().y < (checkViewCenter().y + 90) && zombies[i].zombieSprite.getPosition().y >(checkViewCenter().y - 90)) {
-			window.Draw(zombies[i].zombieSprite);
-			if (zombies[i].bloodSplattered)
-				window.Draw(zombies[i].blood);
+		for (size_t i = 0; i < healthPickups.size(); ++i) {
+			//if (healthPickups[i].getPosition().x < (checkViewCenter().x + 150) && healthPickups[i].getPosition().x >(checkViewCenter().x - 150) && healthPickups[i].getPosition().y < (checkViewCenter().y + 90) && healthPickups[i].getPosition().y >(checkViewCenter().y - 90)) {
+				window.Draw(healthPickups[i]);
+			//}
+		}
+		for (size_t i = 0; i < n_zombies.size(); ++i) {
+			if (n_zombies[i].zombieSprite.getPosition().x < (checkViewCenter().x + 150) && n_zombies[i].zombieSprite.getPosition().x > (checkViewCenter().x - 150) && n_zombies[i].zombieSprite.getPosition().y < (checkViewCenter().y + 90) && n_zombies[i].zombieSprite.getPosition().y > (checkViewCenter().y - 90)) {
+			window.Draw(n_zombies[i].zombieSprite);
+			if (n_zombies[i].bloodSplattered)
+				window.Draw(n_zombies[i].blood);
+			}
+		}
+		for (size_t i = 0; i < b_zombies.size(); ++i) {
+			if (b_zombies[i].zombieSprite.getPosition().x < (checkViewCenter().x + 150) && b_zombies[i].zombieSprite.getPosition().x > (checkViewCenter().x - 150) && b_zombies[i].zombieSprite.getPosition().y < (checkViewCenter().y + 90) && b_zombies[i].zombieSprite.getPosition().y > (checkViewCenter().y - 90)) {
+				window.Draw(b_zombies[i].zombieSprite);
+				if (b_zombies[i].bloodSplattered)
+					window.Draw(b_zombies[i].blood);
 			}
 		}
 		window.Draw(*player.getLegsSprite());

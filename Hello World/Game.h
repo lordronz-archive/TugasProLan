@@ -7,7 +7,8 @@
 #include "Map.h"
 #include "Bullet.h"
 #include "Wall.h"
-#include "Zombie.h"
+#include "NormalZombie.h"
+#include "BigZombie.h"
 #include "GUI.h"
 #include "GameOverHelp.h"
 
@@ -19,10 +20,12 @@ private:
 	Player player;
 	Window window;
 	Bullet b1;
-	Zombie zombie;
+	NormalZombie zombie;
+	BigZombie b_zombie;
 	GUI GUI;
 	GameOverHelp gOver;
-	std::vector<Zombie> zombies;
+	std::vector<NormalZombie> n_zombies;
+	std::vector<BigZombie> b_zombies;
 	std::vector<Bullet> bullets;
 	Map map;
 	std::array<Wall, 25> walls;
@@ -30,6 +33,9 @@ private:
 	sf::View view;
 	sf::Texture cursorText;
 	sf::Sprite cursor;
+	sf::Sprite healthPickup;
+	sf::Texture healthPickText;
+	std::vector<sf::Sprite> healthPickups;
 	sf::Vector2f checkViewCenter();
 	void updatePlayer();
 	void updateWalls();

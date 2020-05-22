@@ -63,6 +63,12 @@
     <ClCompile Include="GameOverHelp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NormalZombie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BigZombie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h">
@@ -96,6 +102,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameOverHelp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalZombie.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BigZombie.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
