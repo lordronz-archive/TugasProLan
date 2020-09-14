@@ -33,11 +33,10 @@ Zombie::Zombie(): xPos(0), yPos(0), tiles{0}, bloodCount(0), bloodSplattered(fal
 	if (file.is_open()) {
 		int i = 0;
 		int j = 0;
-		while (file >> this->tiles[i][j])
+		while (file >> this->tiles[i][j++])
 		{
-			++j;
-			if (j % 40 == 0)
-			{
+			//++j;
+			if (j % 40 == 0) {
 				++i;
 				j = 0;
 			}
