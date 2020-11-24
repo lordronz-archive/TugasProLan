@@ -46,7 +46,7 @@ public:
 	sf::Texture* getPlayerTexture();
 	sf::Vector2f getCharCoord();
 	sf::Vector2f getPlayerCenter();
-	sf::Vector2f getMousePos();
+	sf::Vector2f *getMousePos();
 	Collider GetCollider();
 	void resetLocation();
 	void updateTime();

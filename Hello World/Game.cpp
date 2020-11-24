@@ -261,7 +261,7 @@ void Game::Update() {
 
 	if (window.checkIfBegin() && !gameOver && !window.help)
 	{
-		cursor.setPosition(player.getMousePos());
+		cursor.setPosition(*player.getMousePos());
 
 		updateZombie(player.getCharCoord());
 		updatePlayer();

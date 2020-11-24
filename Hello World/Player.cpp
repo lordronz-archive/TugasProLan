@@ -207,9 +207,9 @@ void Player::resetTime()
 	isMidNight = false;
 }
 
-sf::Vector2f Player::getMousePos()
+sf::Vector2f* Player::getMousePos()
 {
-	return worldPosition;
+	return &worldPosition;
 }
 
 sf::Vector2f Player::getCharCoord()
