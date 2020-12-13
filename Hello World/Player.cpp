@@ -1,10 +1,10 @@
 #include "Player.h"
 
-Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(100), isDead(false), stepCount(0), nightCount(0), isIncreasing(true), isMidNight(false)
+Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(100), isDead(false), stepCount(0), nightCount(0), isIncreasing(true), isMidNight(false), col(sf::Vector2f(0,0), sf::Vector2f(640, 360), nullptr, &player)
 {
 	// Setting up class members.
 	if (!playerTexture.loadFromFile("Textures/ct1.bmp"))
-		std::cout << "ERROR LOADING PLAYER TEXTURE" << std::endl;
+		std::cout << "ERROR LOADING PLAYER TEXTURE\n";
 
 	playerTexture.setSmooth(true);
 	textSize = playerTexture.getSize();
@@ -17,8 +17,10 @@ Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(10
 	player.setTextureRect(sf::IntRect(textSize.x * 0, textSize.y * 2, textSize.x, textSize.y));
 	player.setPosition(sf::Vector2f(640, 360));
 
+	col.updateHalfSize(sf::Vector2f(textSize.x * player.getScale().x, textSize.y * player.getScale().y) / 2.0f);
+
 	if (!gunTexture.loadFromFile("Textures/awpfinal.png"))
-		std::cout << "ERROR LOADING GUN TEXTURE" << std::endl;
+		std::cout << "ERROR LOADING GUN TEXTURE\n";
 
 	gunTexture.setSmooth(true);
 	gun.setTexture(gunTexture);
@@ -28,7 +30,7 @@ Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(10
 	gun.setPosition(player.getPosition());
 
 	if (!legsText.loadFromFile("Textures/legs.bmp"))
-		std::cout << "ERROR LOADING PLAYER TEXTURE" << std::endl;
+		std::cout << "ERROR LOADING PLAYER TEXTURE\n";
 	legsTSize = legsText.getSize();
 	legsTSize.x /= 8;
 	legsTSize.y /= 2;
@@ -44,12 +46,12 @@ Player::Player() : fire(false), isFiring(false), dt1(0), dt2(0), healthPoints(10
 	nightBox.setFillColor(sf::Color(30, 30, 30, 0));
 
 	if (!weaponSfxBuffer.loadFromFile("Sound/galil.ogg"))
-		std::cout << "ERROR LOADING WEAPON SOUND" << std::endl;
+		std::cout << "ERROR LOADING WEAPON SOUND\n";
 
 	weaponSfx.setBuffer(weaponSfxBuffer);
 
 	if (!walkSfxBuffer.loadFromFile("Sound/pl_dirt1.wav"))
-		std::cout << "ERROR LOADING WALKING SOUND" << std::endl;
+		std::cout << "ERROR LOADING WALKING SOUND\n";
 
 	walkSfx.setBuffer(walkSfxBuffer);
 	walkSfx.setVolume(80.f);
@@ -187,12 +189,10 @@ void Player::updatePlayer(sf::RenderWindow* window)
 	nightBox.setPosition(player.getPosition());
 }
 
-Collider Player::GetCollider()
+Collider &Player::GetCollider()
 {
-	sf::Vector2f spriteSize(
-		textSize.x * player.getScale().x,
-		textSize.y * player.getScale().y);
-	return Collider(spriteSize / 2.0f, player.getPosition(), nullptr, &player);
+	col.updatePos(player.getPosition());
+	return col;
 }
 
 void Player::resetLocation()
@@ -212,27 +212,27 @@ sf::Vector2f* Player::getMousePos()
 	return &worldPosition;
 }
 
-sf::Vector2f Player::getCharCoord()
+const sf::Vector2f& Player::getCharCoord()
 {
 	return player.getPosition();
 }
 
-sf::Sprite* Player::getPlayerSprite() 
+sf::Sprite& Player::getPlayerSprite() 
 {
-	return &player;
+	return player;
 }
 
-sf::Sprite* Player::getGunSprite()
+sf::Sprite& Player::getGunSprite()
 {
-	return &gun;
+	return gun;
 }
 
-sf::Sprite* Player::getLegsSprite()
+sf::Sprite& Player::getLegsSprite()
 {
-	return &legs;
+	return legs;
 }
 
-sf::Texture* Player::getPlayerTexture()
+sf::Texture& Player::getPlayerTexture()
 {
-	return &playerTexture;
+	return playerTexture;
 }

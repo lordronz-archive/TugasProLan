@@ -13,8 +13,8 @@ public:
     Zombie();
     sf::Sprite zombieSprite;
     sf::Sprite blood;
-    void Move(sf::Vector2f playerPosition);
-    void update(bool shot, sf::Vector2f playerPosition, bool midNight);
+    void Move(const sf::Vector2f &playerPosition);
+    void update(bool &shot, const sf::Vector2f &playerPosition, bool &midNight);
     void setLocation();
     bool attack();
     sf::Vector2f zombiePosition;
@@ -33,7 +33,7 @@ protected:
     sf::Texture bloodText;
     sf::Vector2f direction;
     sf::Vector2f normalizedDir;
-    bool wallCheck(sf::Vector2f destination);
+    bool wallCheck(const sf::Vector2f& destination);
     sf::Vector2f playerLocB4Lost;
     sf::Vector2f randomLoc;
     sf::Vector2u bloodTextSize;

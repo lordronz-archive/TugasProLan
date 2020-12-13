@@ -4,7 +4,7 @@ void Map::load(const int *tiles)
 {
     sf::Vector2f tileSize(32, 32);
     if (!m_tileset.loadFromFile("Textures/dust.png"))
-        std::cout << "ERROR LOADING MAP TEXTURE" << std::endl;
+        std::cout << "ERROR LOADING MAP TEXTURE\n";
     m_tileset.setSmooth(true);
     // resize the vertex array to fit the level size
     m_vertices.setPrimitiveType(sf::Quads);

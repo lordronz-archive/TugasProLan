@@ -14,8 +14,8 @@ private:
 
 public:
 	Bullet();
-	void fire(sf::RenderWindow *window, sf::Vector2f playerCenter);
-	sf::CircleShape getBullet();
+	void fire(sf::RenderWindow *window, const sf::Vector2f &playerCenter);
+	sf::CircleShape &getBullet();
 	sf::CircleShape projectile;
 	sf::Vector2f currVelocity;
 };

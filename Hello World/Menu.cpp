@@ -5,7 +5,7 @@ Menu::Menu()
 {
 
 	if (!font.loadFromFile("DoubleFeature.ttf"))
-		std::cout << "ERROR LOADING FONT" << std::endl;
+		std::cout << "ERROR LOADING FONT\n";
 
 	menu[0].setFont(font);
 	menu[0].setFillColor(sf::Color::Red);
@@ -41,17 +41,17 @@ Menu::Menu()
 	menuBar[3].color = sf::Color(43, 126, 227, 128);
 
 	if (!menuSfxBuffer.loadFromFile("Sound/dmc_menu_select.ogg"))
-		std::cout << "ERROR LOADING MENU SOUND" << std::endl;
+		std::cout << "ERROR LOADING MENU SOUND\n";
 
 	menuSfx.setBuffer(menuSfxBuffer);
 
 	if (!menuClickBuffer.loadFromFile("Sound/devil-may-cry-menu-sound.ogg"))
-		std::cout << "ERROR LOADING MENU SOUND" << std::endl;
+		std::cout << "ERROR LOADING MENU SOUND\n";
 
 	menuClick.setBuffer(menuClickBuffer);
 
 	if (!menuBg.loadFromFile("Textures/Desert.png"))
-		std::cout << "ERROR LOADING MENU BG IMAGE" << std::endl;
+		std::cout << "ERROR LOADING MENU BG IMAGE\n";
 }
 
 Menu::~Menu() {}

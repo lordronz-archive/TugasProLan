@@ -29,6 +29,7 @@ private:
 	sf::Sound weaponSfx;
 	sf::SoundBuffer walkSfxBuffer;
 	sf::Sound walkSfx;
+	Collider col;
 	int stepCount;
 	void movePlayer();
 	bool Move(float moveX, float moveY);
@@ -40,14 +41,14 @@ private:
 public:
 	Player();
 	void updatePlayer(sf::RenderWindow* window);
-	sf::Sprite* getPlayerSprite();
-	sf::Sprite* getGunSprite();
-	sf::Sprite* getLegsSprite();
-	sf::Texture* getPlayerTexture();
-	sf::Vector2f getCharCoord();
+	sf::Sprite& getPlayerSprite();
+	sf::Sprite& getGunSprite();
+	sf::Sprite& getLegsSprite();
+	sf::Texture& getPlayerTexture();
+	const sf::Vector2f& getCharCoord();
 	sf::Vector2f getPlayerCenter();
 	sf::Vector2f *getMousePos();
-	Collider GetCollider();
+	Collider &GetCollider();
 	void resetLocation();
 	void updateTime();
 	void resetTime();

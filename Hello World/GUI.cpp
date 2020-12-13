@@ -3,7 +3,7 @@
 GUI::GUI()
 {
 	if (!font.loadFromFile("DigitalMono.ttf"))
-		std::cout << "ERROR LOADING FONT" << std::endl;
+		std::cout << "ERROR LOADING FONT\n";
 
 	health.setFont(font);
 	health.setFillColor(sf::Color::Green);
@@ -18,7 +18,7 @@ GUI::GUI()
 	score.setCharacterSize(15);
 }
 
-void GUI::setHealthAndScore(int health, int score, sf::Vector2f pos)
+void GUI::setHealthAndScore(int &health, unsigned int &score, const sf::Vector2f &pos)
 {
 	std::stringstream ss;
 	ss << health;
@@ -31,12 +31,12 @@ void GUI::setHealthAndScore(int health, int score, sf::Vector2f pos)
 	this->score.setString("SCORE:" + ss.str());
 }
 
-sf::Text* GUI::getHealthGUI()
+sf::Text& GUI::getHealthGUI()
 {
-	return &health;
+	return health;
 }
 
-sf::Text* GUI::getScoreGUI()
+sf::Text& GUI::getScoreGUI()
 {
-	return &score;
+	return score;
 }

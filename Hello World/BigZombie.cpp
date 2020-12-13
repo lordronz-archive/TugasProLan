@@ -5,7 +5,7 @@ BigZombie::BigZombie()
 	healthPoints = 120;
 	speed = 1.f;
 	if (!zombieTexture.loadFromFile("Textures/zombie_peradaban.png"))
-		std::cout << "ERROR LOADING ZOMBIE TEXTURE" << std::endl;
+		std::cout << "ERROR LOADING BIG ZOMBIE TEXTURE\n";
 
 	zombieTexture.setSmooth(true);
 	sf::Vector2u textSize = zombieTexture.getSize();

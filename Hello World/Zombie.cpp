@@ -3,7 +3,7 @@
 Zombie::Zombie(): xPos(0), yPos(0), tiles{0}, bloodCount(0), bloodSplattered(false), attackCount(0), dead(false), reallyDead(false)
 {
 	if (!zombieTexture.loadFromFile("Textures/zombie.png"))
-		std::cout << "ERROR LOADING ZOMBIE TEXTURE" << std::endl;
+		std::cout << "ERROR LOADING ZOMBIE TEXTURE\n";
 
 	zombieTexture.setSmooth(true);
 	sf::Vector2u textSize = zombieTexture.getSize();
@@ -14,7 +14,7 @@ Zombie::Zombie(): xPos(0), yPos(0), tiles{0}, bloodCount(0), bloodSplattered(fal
 	zombieSprite.setTextureRect(sf::IntRect(textSize.x * 0, textSize.y * 1, textSize.x, textSize.y));
 
 	if (!bloodText.loadFromFile("Textures/blood.png"))
-		std::cout << "ERROR LOADING BLOOD TEXTURE" << std::endl;
+		std::cout << "ERROR LOADING BLOOD TEXTURE\n";
 
 	bloodTextSize = bloodText.getSize();
 	bloodTextSize.x /= 6;
@@ -24,7 +24,7 @@ Zombie::Zombie(): xPos(0), yPos(0), tiles{0}, bloodCount(0), bloodSplattered(fal
 	blood.setPosition(zombieSprite.getPosition());
 
 	if (!zombieHurtBuffer.loadFromFile("Sound/ZombieHurt.ogg"))
-		std::cout << "ERROR LOADING ZOMBIE SOUND" << std::endl;
+		std::cout << "ERROR LOADING ZOMBIE SOUND\n";
 	zombieHurt.setBuffer(zombieHurtBuffer);
 
 	srand(static_cast<unsigned int>(time(NULL)));
@@ -45,7 +45,7 @@ Zombie::Zombie(): xPos(0), yPos(0), tiles{0}, bloodCount(0), bloodSplattered(fal
 	file.close();
 }
 
-bool Zombie::wallCheck(sf::Vector2f destination)
+bool Zombie::wallCheck(const sf::Vector2f& destination)
 {
 	if (destination.x >= 1280 || destination.x <= 0 || destination.y >= 720 || destination.y <= 0)
 		return true;
@@ -62,7 +62,7 @@ bool Zombie::wallCheck(sf::Vector2f destination)
 	{
 		for (int i = zombieTileX; i > playerTileX; --i)
 		{
-			for (int x : obs)
+			for (int &x : obs)
 			{
 				if (tiles[zombieTileY][i] == x)
 					return true;
@@ -73,7 +73,7 @@ bool Zombie::wallCheck(sf::Vector2f destination)
 	{
 		for (int i = zombieTileX; i < playerTileX; ++i)
 		{
-			for (int x : obs)
+			for (int &x : obs)
 			{
 				if (tiles[zombieTileY][i] == x)
 					return true;
@@ -84,7 +84,7 @@ bool Zombie::wallCheck(sf::Vector2f destination)
 	{
 		for (int i = zombieTileY; i > playerTileY; --i)
 		{
-			for (int x : obs)
+			for (int &x : obs)
 			{
 				if (tiles[i][zombieTileX] == x)
 					return true;
@@ -95,7 +95,7 @@ bool Zombie::wallCheck(sf::Vector2f destination)
 	{
 		for (int i = zombieTileY; i < playerTileY; ++i)
 		{
-			for (int x : obs)
+			for (int &x : obs)
 			{
 				if (tiles[i][zombieTileX] == x)
 					return true;
@@ -113,7 +113,7 @@ void Zombie::death()
 	reallyDead = deathTimer.getElapsedTime().asSeconds() > 2.0f ? true : false;
 }
 
-void Zombie::Move(sf::Vector2f playerPosition)
+void Zombie::Move(const sf::Vector2f &playerPosition)
 {
 	// Make movement
 	if (!dead) {
@@ -160,7 +160,7 @@ void Zombie::Move(sf::Vector2f playerPosition)
 	}
 }
 
-void Zombie::update(bool shot, sf::Vector2f playerPosition, bool midNight)
+void Zombie::update(bool &shot, const sf::Vector2f &playerPosition, bool &midNight)
 {
 	float distance = sqrt(pow((playerPosition.x - zombieSprite.getPosition().x), 2) + pow((playerPosition.y - zombieSprite.getPosition().y), 2));
 

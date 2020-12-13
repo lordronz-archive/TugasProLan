@@ -5,7 +5,7 @@ Collider::Collider(sf::Vector2f HalfSize, sf::Vector2f Position, sf::RectangleSh
 {
 }
 
-bool Collider::checkCollision(Collider other)
+const bool &Collider::checkCollision(Collider other)
 {
 	sf::Vector2f otherPosition = other.Position;
 	sf::Vector2f otherHalfSize = other.HalfSize;
@@ -47,4 +47,14 @@ bool Collider::checkCollision(Collider other)
 		}
 	}
 	return false;
+}
+
+void Collider::updatePos(const sf::Vector2f& pos)
+{
+	Position = pos;
+}
+
+void Collider::updateHalfSize(const sf::Vector2f& sz)
+{
+	HalfSize = sz;
 }

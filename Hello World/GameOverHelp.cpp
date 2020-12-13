@@ -3,7 +3,7 @@
 GameOverHelp::GameOverHelp() :toggler(false), mouseClick0(false), mouseClick1(false), helpToggler(false)
 {
 	if (!font.loadFromFile("DoubleFeature.ttf"))
-		std::cout << "ERROR LOADING FONT" << std::endl;
+		std::cout << "ERROR LOADING FONT\n";
 
 	text[0].setFont(font);
 	text[0].setFillColor(sf::Color::Red);

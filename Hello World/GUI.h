@@ -16,9 +16,9 @@ private:
 
 public:
 	GUI();
-	void setHealthAndScore(int health, int score, sf::Vector2f pos);
-	sf::Text* getHealthGUI();
-	sf::Text* getScoreGUI();
+	void setHealthAndScore(int& health, unsigned int &score, const sf::Vector2f &pos);
+	sf::Text& getHealthGUI();
+	sf::Text& getScoreGUI();
 };
 
 #endif // !GUI_H

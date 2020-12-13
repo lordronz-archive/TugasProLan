@@ -4,7 +4,7 @@ Game::Game() :
 	view(sf::View(sf::FloatRect(640, 360, 256, 144))), walls{ wall }, zombieShot(false), gameOver(false), score(0)
 {
 	if (!cursorText.loadFromFile("Textures/pointer.png"))
-		std::cout << "ERROR LOADING CURSOR TEXTURE" << std::endl;
+		std::cout << "ERROR LOADING CURSOR TEXTURE\n";
 
 	sf::Vector2u textSize = cursorText.getSize();
 	textSize.x /= 2;
@@ -15,7 +15,7 @@ Game::Game() :
 	cursor.setScale(0.25, 0.25);
 
 	if (!healthPickText.loadFromFile("Textures/HealthPickup.png"))
-		std::cout << "ERROR LOADING HEALTH_PICKUP TEXTURE" << std::endl;
+		std::cout << "ERROR LOADING HEALTH_PICKUP TEXTURE\n";
 
 	textSize = healthPickText.getSize();
 	healthPickup.setScale(0.5f, 0.5f);
@@ -23,17 +23,17 @@ Game::Game() :
 	healthPickup.setOrigin(textSize.x / 2.0f, textSize.y / 2.0f);
 
 	if (!bgSoundBuffer.loadFromFile("Sound/bgsound.ogg"))
-		std::cout << "ERROR LOADING BACKGROUND SOUND" << std::endl;
+		std::cout << "ERROR LOADING BACKGROUND SOUND\n";
 
 	bgSound.setBuffer(bgSoundBuffer);
 
 	if (!ricochetBuffer.loadFromFile("Sound/ricochet.ogg"))
-		std::cout << "ERROR LOADING RICOCHET SOUND" << std::endl;
+		std::cout << "ERROR LOADING RICOCHET SOUND\n";
 
 	ricochetSfx.setBuffer(ricochetBuffer);
 
 	if (!attackedBuffer.loadFromFile("Sound/attacked.ogg"))
-		std::cout << "ERROR LOADING BITE SOUND" << std::endl;
+		std::cout << "ERROR LOADING BITE SOUND\n";
 
 	attacked.setBuffer(attackedBuffer);
 
@@ -131,7 +131,7 @@ void Game::updatePlayer() {
 		gameOver = true;
 		gOver.setScore(score);
 	}
-	sf::RenderWindow* win = window.getWindow();
+	sf::RenderWindow *win = window.getWindow();
 	sf::Vector2f playerPos = player.getCharCoord();
 	player.updatePlayer(win);
 
@@ -149,19 +149,19 @@ void Game::updatePlayer() {
 			|| bullets[i].projectile.getPosition().y < 0 || bullets[i].projectile.getPosition().y > 720) {
 			//removing bullets out of the map
 			bullets.erase(bullets.begin() + i);
-			bullets.shrink_to_fit();
+			//bullets.shrink_to_fit();
 		}
 	}
 
 	for (size_t i = 0; i < healthPickups.size(); ++i) {
-		if (healthPickups[i].getGlobalBounds().intersects(player.getPlayerSprite()->getGlobalBounds())) {
+		if (healthPickups[i].getGlobalBounds().intersects(player.getPlayerSprite().getGlobalBounds())) {
 			sf::Vector2f direction = playerPos - healthPickups[i].getPosition();
 			sf::Vector2f normalizedDir = direction / static_cast<float>(sqrt(pow(direction.x, 2) + pow(direction.y, 2)));
 			healthPickups[i].move(normalizedDir * 2.f);
 		}
 		if (sqrt(pow((healthPickups[i].getPosition().x - playerPos.x), 2) + pow((healthPickups[i].getPosition().y - playerPos.y), 2)) < 1.f) {
 			healthPickups.erase(healthPickups.begin() + i);
-			healthPickups.shrink_to_fit();
+			//healthPickups.shrink_to_fit();
 			player.healthPoints = player.healthPoints + 10 >= 100 ? 100 : player.healthPoints + 10;
 		}
 	}
@@ -180,14 +180,14 @@ void Game::updateWalls() {
 				float distance = sqrt(pow((player.getCharCoord().x - bullets[j].projectile.getPosition().x), 2) + pow((player.getCharCoord().y - bullets[j].projectile.getPosition().y), 2));
 				ricochetSfx.setVolume(std::min(std::max((100.f - distance / 5.f), 1.f), 100.f));
 				bullets.erase(bullets.begin() + j);
-				bullets.shrink_to_fit();
+				//bullets.shrink_to_fit();
 				ricochetSfx.play();
 			}
 		}
 	}
 }
 
-void Game::updateZombie(sf::Vector2f playerPos)
+void Game::updateZombie(const sf::Vector2f &playerPos)
 {
 	//spawn a normal zombie
 	if (n_zombies.size() < 6) {
@@ -213,7 +213,7 @@ void Game::updateZombie(sf::Vector2f playerPos)
 		for (size_t j = 0; j < bullets.size(); ++j) {
 			if (bullets[j].projectile.getGlobalBounds().intersects(n_zombies[i].zombieSprite.getGlobalBounds())) {
 				bullets.erase(bullets.begin() + j);
-				bullets.shrink_to_fit();
+				//bullets.shrink_to_fit();
 				zombieShot = true;
 			}
 		}
@@ -240,7 +240,7 @@ void Game::updateZombie(sf::Vector2f playerPos)
 		for (size_t j = 0; j < bullets.size(); ++j) {
 			if (bullets[j].projectile.getGlobalBounds().intersects(b_zombies[i].zombieSprite.getGlobalBounds())) {
 				bullets.erase(bullets.begin() + j);
-				bullets.shrink_to_fit();
+				//bullets.shrink_to_fit();
 				zombieShot = true;
 			}
 		}
@@ -330,17 +330,17 @@ void Game::Render()
 					window.Draw(b_zombies[i].blood);
 			}
 		}
-		window.Draw(*player.getLegsSprite());
-		window.Draw(*player.getPlayerSprite());
-		window.Draw(*player.getGunSprite());
+		window.Draw(player.getLegsSprite());
+		window.Draw(player.getPlayerSprite());
+		window.Draw(player.getGunSprite());
 		for (size_t i = 0; i < bullets.size(); ++i) {
 			if (bullets[i].projectile.getPosition().x < (checkViewCenter().x + 128) && bullets[i].projectile.getPosition().x >(checkViewCenter().x - 128) && bullets[i].projectile.getPosition().y < (checkViewCenter().y + 72) && bullets[i].projectile.getPosition().y >(checkViewCenter().y - 72))
 				window.Draw(bullets[i].projectile);
 		}
 		window.Draw(player.nightBox);
 		window.Draw(cursor);
-		window.Draw(*GUI.getHealthGUI());
-		window.Draw(*GUI.getScoreGUI());
+		window.Draw(GUI.getHealthGUI());
+		window.Draw(GUI.getScoreGUI());
 	}
 	else if (gameOver)
 	{

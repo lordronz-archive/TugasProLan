@@ -39,7 +39,7 @@ private:
 	sf::Vector2f checkViewCenter();
 	void updatePlayer();
 	void updateWalls();
-	void updateZombie(sf::Vector2f playerPos);
+	void updateZombie(const sf::Vector2f& playerPos);
 	sf::Sound bgSound;
 	sf::SoundBuffer bgSoundBuffer;
 	sf::Sound ricochetSfx;

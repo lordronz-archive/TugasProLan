@@ -6,7 +6,7 @@ Bullet::Bullet() :projectile(sf::CircleShape(.8f)), currVelocity(0.0f, 0.0f), ma
 	projectile.setOrigin(projectile.getRadius(), projectile.getRadius());
 }
 
-void Bullet::fire(sf::RenderWindow* window, sf::Vector2f playerCenter)
+void Bullet::fire(sf::RenderWindow *window, const sf::Vector2f &playerCenter)
 {
 	sf::Vector2i mousePosition = sf::Mouse::getPosition(*window);
 	sf::Vector2f worldPosition = window->mapPixelToCoords(mousePosition);
@@ -16,7 +16,7 @@ void Bullet::fire(sf::RenderWindow* window, sf::Vector2f playerCenter)
 	currVelocity = aimDirNorm * maxSpeed;
 }
 
-sf::CircleShape Bullet::getBullet()
+sf::CircleShape &Bullet::getBullet()
 {
 	return projectile;
 }

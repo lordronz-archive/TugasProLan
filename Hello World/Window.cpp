@@ -13,7 +13,7 @@ void Window::BeginDraw()
 	window.clear();
 }
 
-void Window::EndDraw(bool gameOver)
+void Window::EndDraw(bool &gameOver)
 {
 	window.display();
 	play ? window.setMouseCursorVisible(false) : window.setMouseCursorVisible(true);
@@ -87,7 +87,7 @@ void Window::Update()
 	}
 }
 
-bool Window::IsDone()
+bool &Window::IsDone()
 {
 	return m_isDone;
 }
@@ -97,7 +97,7 @@ void Window::View(sf::View& view)
 	window.setView(view);
 }
 
-sf::Vector2u Window::GetWindowSize()
+sf::Vector2u &Window::GetWindowSize()
 {
 	return winSize;
 }
@@ -120,7 +120,7 @@ void Window::Draw(sf::Drawable& l_drawable)
 		window.draw(l_drawable);
 }
 
-bool Window::checkIfBegin()
+bool &Window::checkIfBegin()
 {
 	return play;
 }
