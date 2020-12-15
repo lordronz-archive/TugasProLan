@@ -20,15 +20,10 @@ GUI::GUI()
 
 void GUI::setHealthAndScore(int &health, unsigned int &score, const sf::Vector2f &pos)
 {
-	std::stringstream ss;
-	ss << health;
 	this->health.setPosition(pos.x - 110, pos.y + 60);
-	this->health.setString("HP:" + ss.str());
-	ss.str(std::string());
-	ss.clear();
-	ss << score;
+	this->health.setString("HP:" + std::to_string(health));
 	this->score.setPosition(pos.x + 50, pos.y + 60);
-	this->score.setString("SCORE:" + ss.str());
+	this->score.setString("SCORE:" + std::to_string(score));
 }
 
 sf::Text& GUI::getHealthGUI()

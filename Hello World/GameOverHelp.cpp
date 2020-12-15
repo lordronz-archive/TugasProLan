@@ -68,9 +68,7 @@ void GameOverHelp::setScore(unsigned int score)
 	text[0].setLineSpacing(1.f);
 	text[0].setString("WASTED");
 	text[0].setPosition(sf::Vector2f(1280 / 2.0f - 100.f, 720 / 2 - 300.f));
-	std::stringstream ss;
-	ss << score;
-	this->text[1].setString("YOUR SCORE: " + ss.str());
+	this->text[1].setString("YOUR SCORE: " + std::to_string(score));
 	text[1].setPosition(sf::Vector2f(1280 / 2.0f - 120.f, 720 / 2.f - 100.f));
 	text[2].setString("RETURN TO MAIN MENU");
 	text[2].setPosition(sf::Vector2f(1280 / 2.0f - 150.f, 720 / 2.f + 50));

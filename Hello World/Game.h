@@ -48,6 +48,7 @@ private:
 	sf::SoundBuffer attackedBuffer;
 	bool zombieShot;
 	bool gameOver;
+	bool viewSet1 = false, viewSet2 = false;
 	unsigned int score;
 
 public:

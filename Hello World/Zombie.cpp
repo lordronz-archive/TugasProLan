@@ -233,7 +233,7 @@ Collider Zombie::GetCollider()
 	return Collider(spriteSize / 2.0f, zombieSprite.getPosition(), nullptr, &zombieSprite);
 }
 
-sf::Sprite* Zombie::getSprite()
+sf::Sprite &Zombie::getSprite()
 {
-	return &zombieSprite;
+	return zombieSprite;
 }

@@ -192,11 +192,11 @@ void Game::updateZombie(const sf::Vector2f &playerPos)
 	//spawn a normal zombie
 	if (n_zombies.size() < 6) {
 		n_zombies.push_back(zombie);
-		n_zombies[n_zombies.size() - 1].setLocation();
+		n_zombies.back().setLocation();
 		//spawn a big zombie(or monster? idk)
 		if (rand() % 4 == 2 && b_zombies.size() < 2) {
 			b_zombies.push_back(b_zombie);
-			b_zombies[b_zombies.size() - 1].setLocation();
+			b_zombies.back().setLocation();
 		}
 	}
 	//update normal zombies
@@ -271,8 +271,12 @@ void Game::Update() {
 			bgSound.play();
 
 		//set view relative to player
-		view.setSize(sf::Vector2f(256, 144));
+		if (!viewSet1) {
+			view.setSize(sf::Vector2f(256, 144));
+			viewSet1 = true;
+		}
 		view.setCenter(checkViewCenter());
+		if (viewSet2) viewSet2 = false;
 	}
 
 	else if (!window.checkIfBegin() || gameOver || window.help)
@@ -299,8 +303,12 @@ void Game::Update() {
 			window.togglePlay();
 			gOver.helpToggler = false;
 		}
-		view.setSize(sf::Vector2f(1280, 720));
-		view.setCenter(sf::Vector2f(640, 360));
+		if (!viewSet2) {
+			view.setSize(sf::Vector2f(1280, 720));
+			view.setCenter(sf::Vector2f(640, 360));
+			viewSet2 = true;
+		}
+		if (viewSet1) viewSet1 = false;
 	}
 
 }

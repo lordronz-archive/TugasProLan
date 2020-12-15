@@ -19,7 +19,7 @@ public:
     bool attack();
     sf::Vector2f zombiePosition;
     Collider GetCollider();
-    sf::Sprite* getSprite();
+    sf::Sprite &getSprite();
     int tiles[23][40];
     int healthPoints;
     bool bloodSplattered;
