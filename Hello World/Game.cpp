@@ -140,7 +140,7 @@ void Game::updatePlayer() {
 	//fire
 	if (player.fire && !player.isFiring) {
 		b1.fire(win, playerPos);
-		bullets.push_back(Bullet(b1));
+		bullets.emplace_back(Bullet(b1));
 	}
 
 	for (size_t i = 0; i < bullets.size(); ++i) {
@@ -175,14 +175,16 @@ void Game::updateWalls() {
 			w.GetCollider().checkCollision(nz.GetCollider());
 		for (auto &bz: b_zombies)
 			w.GetCollider().checkCollision(bz.GetCollider());
-		for (auto bl = bullets.begin(); bl != bullets.end(); ++bl) {
+		for (auto bl = bullets.begin(); bl != bullets.end();) {
 			if (bl->projectile.getGlobalBounds().intersects(w.body.getGlobalBounds())) {
 				float distance = sqrt(pow((player.getCharCoord().x - bl->projectile.getPosition().x), 2) + pow((player.getCharCoord().y - bl->projectile.getPosition().y), 2));
 				ricochetSfx.setVolume(std::min(std::max((100.f - distance / 5.f), 1.f), 100.f));
 				//bullets.shrink_to_fit();
 				ricochetSfx.play();
-				if ((bl = bullets.erase(bl)) == bullets.end()) break;
+				//if ((bl = bullets.erase(bl)) == bullets.end()) break;
+				bl = bullets.erase(bl);
 			}
+			else ++bl;
 		}
 	}
 }
@@ -191,16 +193,16 @@ void Game::updateZombie(const sf::Vector2f &playerPos)
 {
 	//spawn a normal zombie
 	if (n_zombies.size() < 6) {
-		n_zombies.push_back(zombie);
+		n_zombies.emplace_back(zombie);
 		n_zombies.back().setLocation();
 		//spawn a big zombie(or monster? idk)
 		if (rand() % 4 == 2 && b_zombies.size() < 2) {
-			b_zombies.push_back(b_zombie);
+			b_zombies.emplace_back(b_zombie);
 			b_zombies.back().setLocation();
 		}
 	}
 	//update normal zombies
-	for (auto nz = n_zombies.begin(); nz != n_zombies.end(); ++nz) {
+	for (auto nz = n_zombies.begin(); nz != n_zombies.end();) {
 		zombieShot = false;
 		if (sqrt(pow((nz->zombiePosition.x - playerPos.x), 2) + pow((nz->zombiePosition.y - playerPos.y), 2)) > 20.f)
 			nz->Move(playerPos);
@@ -210,23 +212,25 @@ void Game::updateZombie(const sf::Vector2f &playerPos)
 				attacked.play();
 			}
 		}
-		for (auto bl = bullets.begin(); bl != bullets.end(); ++bl) {
+		for (auto bl = bullets.begin(); bl != bullets.end();) {
 			if (bl->projectile.getGlobalBounds().intersects(nz->zombieSprite.getGlobalBounds())) {
 				//bullets.shrink_to_fit();
 				zombieShot = true;
-				if((bl = bullets.erase(bl)) == bullets.end()) break;
+				bl = bullets.erase(bl);
 			}
+			else ++bl;
 		}
 		nz->update(zombieShot, playerPos, player.isMidNight);
 		if (nz->reallyDead) {
 			healthPickup.setPosition(nz->zombiePosition);
-			healthPickups.push_back(healthPickup);
+			healthPickups.emplace_back(healthPickup);
 			score += 10;
-			if((nz = n_zombies.erase(nz)) == n_zombies.end()) break;
+			nz = n_zombies.erase(nz);
 		}
+		else ++nz;
 	}
 	//update big zombies
-	for (auto bz = b_zombies.begin(); bz != b_zombies.end(); ++bz) {
+	for (auto bz = b_zombies.begin(); bz != b_zombies.end();) {
 		zombieShot = false;
 		if (sqrt(pow((bz->zombiePosition.x - playerPos.x), 2) + pow((bz->zombiePosition.y - playerPos.y), 2)) > 25.f)
 			bz->Move(playerPos);
@@ -236,27 +240,28 @@ void Game::updateZombie(const sf::Vector2f &playerPos)
 				attacked.play();
 			}
 		}
-		for (auto bl = bullets.begin(); bl != bullets.end(); ++bl) {
+		for (auto bl = bullets.begin(); bl != bullets.end();) {
 			if (bl->projectile.getGlobalBounds().intersects(bz->zombieSprite.getGlobalBounds())) {
 				//bullets.shrink_to_fit();
 				zombieShot = true;
-				if ((bl = bullets.erase(bl)) == bullets.end()) break;
+				bl = bullets.erase(bl);
 			}
+			else ++bl;
 		}
 		bz->update(zombieShot, playerPos, player.isMidNight);
 		if (bz->reallyDead) {
 			healthPickup.setPosition(bz->zombiePosition);
-			healthPickups.push_back(healthPickup);
+			healthPickups.emplace_back(healthPickup);
 			score += 30;
-			if ((bz = b_zombies.erase(bz)) == b_zombies.end()) break;
+			bz = b_zombies.erase(bz);
 		}
+		else ++bz;
 	}
 }
 
 void Game::Update() {
 
 	window.Update(); // Update window events.
-
 	if (window.checkIfBegin() && !gameOver && !window.help)
 	{
 		cursor.setPosition(*player.getMousePos());

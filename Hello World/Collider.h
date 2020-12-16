@@ -9,7 +9,7 @@ class Collider
 public:
 	//Collider(sf::RectangleShape& body);
 	Collider(sf::Vector2f Halfsize, sf::Vector2f Position, sf::RectangleShape* body, sf::Sprite* sprite);
-	const bool &checkCollision(Collider other);
+	void checkCollision(Collider other);
 	const sf::Vector2f &GetPosition() { return body.getPosition(); }
 	const sf::Vector2f &GetHalfSize() { return body.getSize() / 2.0f; }
 	void Move(float dx, float dy) { body.move(dx, dy); }
